@@ -125,35 +125,71 @@ def load_raw_dataset(
         item_path = f"data/{dataset}/{dataset}.item"
         print(f"Using default item_path: {item_path}")
 
-    print(f"Reading item data from {item_path}")
-    # FIX: Handle CSV parsing errors with more robust error handling
-    try:
-        # First attempt with standard settings
-        item_df = pd.read_csv(
-            item_path, delimiter="\t", header=0, engine="python", encoding="latin-1"
-        )
-    except pd.errors.ParserError as e:
-        print(f"Parser error with standard settings: {e}")
-        print("Trying with on_bad_lines='warn' and encoding='utf-8'")
-        item_df = pd.read_csv(
-            item_path,
-            delimiter="\t",
-            header=0,
-            engine="python",
-            encoding="utf-8",
-            on_bad_lines="warn",
-        )
-    print(f"Loaded item data with shape: {item_df.shape}")
+    # Max: This code was put into comment becuase accessing non-existing .item files will lead to errors
+    #print(f"Reading item data from {item_path}")
+    ## FIX: Handle CSV parsing errors with more robust error handling
+    #try:
+    #    # First attempt with standard settings
+    #    item_df = pd.read_csv(
+    #        item_path, delimiter="\t", header=0, engine="python", encoding="latin-1"
+    #    )
+    #except pd.errors.ParserError as e:
+    #    print(f"Parser error with standard settings: {e}")
+    #    print("Trying with on_bad_lines='warn' and encoding='utf-8'")
+    #    item_df = pd.read_csv(
+    #        item_path,
+    #        delimiter="\t",
+    #        header=0,
+    #        engine="python",
+    #        encoding="utf-8",
+    #        on_bad_lines="warn",
+    #    )
+    #print(f"Loaded item data with shape: {item_df.shape}")
+#
+    #all_genres = [
+    #    genre
+    #    for genre_list in item_df[category_id].fillna("[Nan]")
+    #    for genre in genre_list.strip("[]").split(", ")
+    #]
+    #unique_genres_list = list(set(all_genres))
+    #item_map_to_category = dict(
+    #    zip(item_df[item_id].astype(int) + 1, item_df[category_id])
+    #)
 
-    all_genres = [
-        genre
-        for genre_list in item_df[category_id].fillna("[Nan]")
-        for genre in genre_list.strip("[]").split(", ")
-    ]
-    unique_genres_list = list(set(all_genres))
-    item_map_to_category = dict(
-        zip(item_df[item_id].astype(int) + 1, item_df[category_id])
-    )
+    if os.path.exists(item_path):
+        print(f"Reading item data from {item_path}")
+        try:
+            item_df = pd.read_csv(
+                item_path, delimiter="\t", header=0, engine="python", encoding="latin-1"
+            )
+        except pd.errors.ParserError as e:
+            print(f"Parser error with standard settings: {e}")
+            print("Trying with on_bad_lines='warn' and encoding='utf-8'")
+            item_df = pd.read_csv(
+                item_path,
+                delimiter="\t",
+                header=0,
+                engine="python",
+                encoding="utf-8",
+                on_bad_lines="warn",
+            )
+        print(f"Loaded item data with shape: {item_df.shape}")
+    
+        all_genres = [
+            genre
+            for genre_list in item_df[category_id].fillna("[Nan]")
+            for genre in genre_list.strip("[]").split(", ")
+        ]
+        unique_genres_list = list(set(all_genres))
+        item_map_to_category = dict(
+            zip(item_df[item_id].astype(int) + 1, item_df[category_id])
+        )
+    else:
+        print(f"Item file {item_path} not found. Skipping item metadata.")
+        item_df = None
+        item_map_to_category = {}
+        unique_genres_list = []
+
 
     def select(data, index, index_val):
         print(f"Selecting data with index value {index_val}")
@@ -265,7 +301,9 @@ def load_raw_dataset(
     print("# users:", num_users)
     print("# items:", num_items)
     print("# interactions:", len(ret["train"]))
-    print("# unique genres:", len(unique_genres_list))
+    #print("# unique genres:", len(unique_genres_list))
+    print("# unique genres:", len(unique_genres_list) if unique_genres_list else 0)
+
 
     return ret
 

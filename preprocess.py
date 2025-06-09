@@ -30,17 +30,9 @@ def prep_recbole(
         raise Exception(f"Interaction file not found at {inter_file_path}")
 
     # First, check if the item file exists and load it
-    if os.path.exists(item_file_path):
-        if "original" not in item_file_path:
-            print(
-                "provide the original dataset as {dataset_path}_original.item as a new dataset will be created and to not be overwritten!"
-            )
-            raise Exception(
-                f"Dataset was not found. I am looking for {dataset_path}_original.item."
-            )
-
-        # RecBole .item files are typically tab-separated with headers
-        item_df = pd.read_csv(item_file_path, sep="\t")
+    if not item_file_path or not os.path.exists(item_file_path):
+        print("⚠️ Skipping item file processing — none provided.")
+        item_df = pd.DataFrame({item_id_2: np.unique(items)})
     else:
         print("The .item file was not found under the path:" + item_file_path)
         # If you want to continue without an item file, comment out the next line
@@ -238,11 +230,11 @@ if __name__ == "__main__":
         exit(0)
 
     dataset = sys.argv[1]
-
-    print("\n\n!!!!!!!! STARTED PROCESSING {} !!!!!!!!".format(dataset))
+    print(f"\n\n!!!!!!!! STARTED PROCESSING {dataset} !!!!!!!!")
 
     if dataset == "ml-1m":
         total_data = prep_movielens(BASE_PATH + "/ml-1m/ratings.dat")
+
     elif dataset == "steam":
         total_data = prep_recbole(
             BASE_PATH + "/steam/steam.inter",
@@ -252,9 +244,19 @@ if __name__ == "__main__":
             BASE_PATH + "/steam/steam_original.item",
             "id:token",
         )
-    else:
-        raise Exception("Could not undestand this dataset")
 
-    total_data.save_data(BASE_PATH + "{}/".format(dataset))
+    elif dataset == "netflix":
+        total_data = prep_recbole(
+        BASE_PATH + "/netflix/netflix_25k.inter",
+        "user_id:token",
+        "item_id:token",
+        "rating:float",
+        item_file_path="",  # or use a dummy path
+        item_id_2="item_id:token",
+)
+    else:
+        raise Exception("Could not understand this dataset")
+
+    total_data.save_data(BASE_PATH + f"{dataset}/")
     total_data.train_test_split()
-    total_data.save_index(BASE_PATH + "{}/".format(dataset))
+    total_data.save_index(BASE_PATH + f"{dataset}/")

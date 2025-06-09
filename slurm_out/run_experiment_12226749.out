@@ -1,0 +1,390 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Creating Data
+Using default paths: data_path=data/magazine/total_data.hdf5, index_path=data/magazine/index.npz
+Loading data from data/magazine/total_data.hdf5
+Loaded raw data with shape: (89689, 3)
+Loading index from data/magazine/index.npz
+Loaded index with shape: (89689,)
+Remapping user and item IDs
+Identifying valid users and items
+Scanning for valid entries:   0%|          | 0/89689 [00:00<?, ?it/s]Scanning for valid entries:  70%|███████   | 62848/89689 [00:00<00:00, 628465.62it/s]Scanning for valid entries: 100%|██████████| 89689/89689 [00:00<00:00, 643027.96it/s]
+Found 3092 valid users and 1305 valid items
+User and item mapping created
+Creating new data and index arrays with mapped IDs
+Remapping data:   0%|          | 0/89689 [00:00<?, ?it/s]Remapping data:  67%|██████▋   | 60019/89689 [00:00<00:00, 600167.68it/s]Remapping data: 100%|██████████| 89689/89689 [00:00<00:00, 623750.92it/s]
+Remapped data shape: (12689, 3), index shape: (12689,)
+Loading item data
+Using default item_path: data/magazine/magazine.item
+Item file data/magazine/magazine.item not found. Skipping item metadata.
+Creating train/val/test splits
+Selecting data with index value 0
+Found 5984 entries with index value 0
+Selecting data with index value 1
+Found 436 entries with index value 1
+Selecting data with index value 2
+Found 6269 entries with index value 2
+Split sizes - Train: 5984, Val: 436, Test: 6269
+Dataset has 3092 users and 1305 items
+Cleaning up memory
+Creating positive sets for train/val/test
+Creating user history from array with shape (5984, 3)
+Building user history:   0%|          | 0/5984 [00:00<?, ?it/s]Building user history: 100%|██████████| 5984/5984 [00:00<00:00, 572768.49it/s]
+User history stats - Min: 1, Max: 43, Avg: 1.92
+Creating user history from array with shape (436, 3)
+Building user history:   0%|          | 0/436 [00:00<?, ?it/s]Building user history: 100%|██████████| 436/436 [00:00<00:00, 559925.46it/s]
+User history stats - Min: 0, Max: 5, Avg: 0.14
+Creating user history from array with shape (6269, 3)
+Building user history:   0%|          | 0/6269 [00:00<?, ?it/s]Building user history: 100%|██████████| 6269/6269 [00:00<00:00, 585484.12it/s]
+User history stats - Min: 1, Max: 7, Avg: 1.99
+Creating sparse matrices
+Created train matrix with shape (3092, 1305) and 5934 non-zeros
+Created val matrix with shape (3092, 1305) and 436 non-zeros
+Generating negative samples for evaluation
+Generating negatives:   0%|          | 0/3092 [00:00<?, ?it/s]Generating negatives:  22%|██▏       | 687/3092 [00:00<00:00, 6865.85it/s]Generating negatives:  44%|████▍     | 1374/3092 [00:00<00:00, 6799.16it/s]Generating negatives:  66%|██████▋   | 2054/3092 [00:00<00:00, 6786.12it/s]Generating negatives:  88%|████████▊ | 2733/3092 [00:00<00:00, 6774.99it/s]Generating negatives: 100%|██████████| 3092/3092 [00:00<00:00, 6782.27it/s]
+2025-06-06 15:28:45.811910: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1749216525.833093  740424 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1749216525.840319  740424 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1749216525.858217  740424 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1749216525.858250  740424 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1749216525.858255  740424 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1749216525.858260  740424 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+Generated negative samples with shape (3092, 50)
+Dataset loading complete. Summary:
+# users: 3092
+# items: 1305
+# interactions: 5984
+# unique genres: 0
+Start training!
+Get item propensity!
+Checking lamda: 0.0
+
+[EVALUATE] Starting evaluation with topk=[10, 100], test_set_eval=False
+[EVALUATE] Hyperparameters: num_users=3092, num_items=1305, lambda=0.0
+[EVALUATE] Train positive set size: 3092
+[EVALUATE] Prediction set size: 3092
+[EVALUATE] Processing users in batches of 20000
+[EVALUATE] Processing batch of users 0 to 3091 (total: 3092)
+[EVALUATE] Running forward pass for batch 0 to 3091
+[EVALUATE] Forward pass complete, prediction shape: (3092, 1305)
+[EVALUATE] Evaluating batch 0 to 3091
+[EVAL_BATCH] Starting batch evaluation with 3092 users
+[EVAL_BATCH] User 0: processing 5 positive and 50 negative examples
+[EVAL_BATCH] User 2000: processing 1 positive and 50 negative examples
+[EVAL_BATCH] Collected 20986 predictions for AUC calculation
+[EVAL_BATCH] Marking train-set consumed items as negative infinity
+[EVAL_BATCH] User 0: marking 43 train positive items as -INF
+[EVAL_BATCH] User 1000: marking 1 train positive items as -INF
+[EVAL_BATCH] User 2000: marking 3 train positive items as -INF
+[EVAL_BATCH] User 3000: marking 1 train positive items as -INF
+[EVAL_BATCH] Sorting indices for top-100 recommendations
+[EVAL_BATCH] Computing metrics for k=10
+[EVAL_BATCH] User 0, k=10: 0 hits out of 5.0 possible
+[EVAL_BATCH] User 2000, k=10: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=10 metrics - Average HR: 0.0084, Average NDCG: 0.0048, Average PSP: 0.0082
+[EVAL_BATCH] Computing metrics for k=100
+[EVAL_BATCH] User 0, k=100: 1 hits out of 5.0 possible
+[EVAL_BATCH] User 2000, k=100: 1 hits out of 1.0 possible
+[EVAL_BATCH] k=100 metrics - Average HR: 0.0474, Average NDCG: 0.0124, Average PSP: 0.0466
+[EVAL_BATCH] Batch evaluation complete, returning 20986 predictions
+[EVALUATE] Batch evaluation complete
+[EVALUATE] Accumulated 20986 predictions and 20986 labels
+[EVALUATE] All batches processed, computing final metrics
+[EVALUATE] Computed AUC: 0.6498
+[EVALUATE] HR@10: 0.8409
+[EVALUATE] HR@100: 4.7445
+[EVALUATE] NDCG@10: 0.4762
+[EVALUATE] NDCG@100: 1.2368
+[EVALUATE] PSP@10: 0.8231
+[EVALUATE] PSP@100: 4.6576
+[EVALUATE] Final metrics: num_users=3092, num_interactions=5934
+val_metrics: {'HR@10': 0.8409, 'HR@100': 4.7445, 'NDCG@10': 0.4762, 'NDCG@100': 1.2368, 'PSP@10': 0.8231, 'PSP@100': 4.6576, 'GINI@10': 0.0, 'GINI@100': 0.0, 'AUC': 0.6498, 'num_users': 3092, 'num_interactions': 5934}
+Checking lamda: 1.0
+
+[EVALUATE] Starting evaluation with topk=[10, 100], test_set_eval=False
+[EVALUATE] Hyperparameters: num_users=3092, num_items=1305, lambda=1.0
+[EVALUATE] Train positive set size: 3092
+[EVALUATE] Prediction set size: 3092
+[EVALUATE] Processing users in batches of 20000
+[EVALUATE] Processing batch of users 0 to 3091 (total: 3092)
+[EVALUATE] Running forward pass for batch 0 to 3091
+[EVALUATE] Forward pass complete, prediction shape: (3092, 1305)
+[EVALUATE] Evaluating batch 0 to 3091
+[EVAL_BATCH] Starting batch evaluation with 3092 users
+[EVAL_BATCH] User 0: processing 5 positive and 50 negative examples
+[EVAL_BATCH] User 2000: processing 1 positive and 50 negative examples
+[EVAL_BATCH] Collected 20986 predictions for AUC calculation
+[EVAL_BATCH] Marking train-set consumed items as negative infinity
+[EVAL_BATCH] User 0: marking 43 train positive items as -INF
+[EVAL_BATCH] User 1000: marking 1 train positive items as -INF
+[EVAL_BATCH] User 2000: marking 3 train positive items as -INF
+[EVAL_BATCH] User 3000: marking 1 train positive items as -INF
+[EVAL_BATCH] Sorting indices for top-100 recommendations
+[EVAL_BATCH] Computing metrics for k=10
+[EVAL_BATCH] User 0, k=10: 0 hits out of 5.0 possible
+[EVAL_BATCH] User 2000, k=10: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=10 metrics - Average HR: 0.0265, Average NDCG: 0.0161, Average PSP: 0.0259
+[EVAL_BATCH] Computing metrics for k=100
+[EVAL_BATCH] User 0, k=100: 1 hits out of 5.0 possible
+[EVAL_BATCH] User 2000, k=100: 1 hits out of 1.0 possible
+[EVAL_BATCH] k=100 metrics - Average HR: 0.0690, Average NDCG: 0.0244, Average PSP: 0.0673
+[EVAL_BATCH] Batch evaluation complete, returning 20986 predictions
+[EVALUATE] Batch evaluation complete
+[EVALUATE] Accumulated 20986 predictions and 20986 labels
+[EVALUATE] All batches processed, computing final metrics
+[EVALUATE] Computed AUC: 0.7688
+[EVALUATE] HR@10: 2.6466
+[EVALUATE] HR@100: 6.9006
+[EVALUATE] NDCG@10: 1.6116
+[EVALUATE] NDCG@100: 2.4437
+[EVALUATE] PSP@10: 2.5899
+[EVALUATE] PSP@100: 6.726
+[EVALUATE] Final metrics: num_users=3092, num_interactions=5934
+val_metrics: {'HR@10': 2.6466, 'HR@100': 6.9006, 'NDCG@10': 1.6116, 'NDCG@100': 2.4437, 'PSP@10': 2.5899, 'PSP@100': 6.726, 'GINI@10': 0.0, 'GINI@100': 0.0, 'AUC': 0.7688, 'num_users': 3092, 'num_interactions': 5934}
+Checking lamda: 5.0
+
+[EVALUATE] Starting evaluation with topk=[10, 100], test_set_eval=False
+[EVALUATE] Hyperparameters: num_users=3092, num_items=1305, lambda=5.0
+[EVALUATE] Train positive set size: 3092
+[EVALUATE] Prediction set size: 3092
+[EVALUATE] Processing users in batches of 20000
+[EVALUATE] Processing batch of users 0 to 3091 (total: 3092)
+[EVALUATE] Running forward pass for batch 0 to 3091
+[EVALUATE] Forward pass complete, prediction shape: (3092, 1305)
+[EVALUATE] Evaluating batch 0 to 3091
+[EVAL_BATCH] Starting batch evaluation with 3092 users
+[EVAL_BATCH] User 0: processing 5 positive and 50 negative examples
+[EVAL_BATCH] User 2000: processing 1 positive and 50 negative examples
+[EVAL_BATCH] Collected 20986 predictions for AUC calculation
+[EVAL_BATCH] Marking train-set consumed items as negative infinity
+[EVAL_BATCH] User 0: marking 43 train positive items as -INF
+[EVAL_BATCH] User 1000: marking 1 train positive items as -INF
+[EVAL_BATCH] User 2000: marking 3 train positive items as -INF
+[EVAL_BATCH] User 3000: marking 1 train positive items as -INF
+[EVAL_BATCH] Sorting indices for top-100 recommendations
+[EVAL_BATCH] Computing metrics for k=10
+[EVAL_BATCH] User 0, k=10: 0 hits out of 5.0 possible
+[EVAL_BATCH] User 2000, k=10: 1 hits out of 1.0 possible
+[EVAL_BATCH] k=10 metrics - Average HR: 0.0316, Average NDCG: 0.0203, Average PSP: 0.0308
+[EVAL_BATCH] Computing metrics for k=100
+[EVAL_BATCH] User 0, k=100: 1 hits out of 5.0 possible
+[EVAL_BATCH] User 2000, k=100: 1 hits out of 1.0 possible
+[EVAL_BATCH] k=100 metrics - Average HR: 0.0756, Average NDCG: 0.0292, Average PSP: 0.0740
+[EVAL_BATCH] Batch evaluation complete, returning 20986 predictions
+[EVALUATE] Batch evaluation complete
+[EVALUATE] Accumulated 20986 predictions and 20986 labels
+[EVALUATE] All batches processed, computing final metrics
+[EVALUATE] Computed AUC: 0.8103
+[EVALUATE] HR@10: 3.1587
+[EVALUATE] HR@100: 7.5636
+[EVALUATE] NDCG@10: 2.0326
+[EVALUATE] NDCG@100: 2.9232
+[EVALUATE] PSP@10: 3.0838
+[EVALUATE] PSP@100: 7.4012
+[EVALUATE] Final metrics: num_users=3092, num_interactions=5934
+val_metrics: {'HR@10': 3.1587, 'HR@100': 7.5636, 'NDCG@10': 2.0326, 'NDCG@100': 2.9232, 'PSP@10': 3.0838, 'PSP@100': 7.4012, 'GINI@10': 0.0, 'GINI@100': 0.0, 'AUC': 0.8103, 'num_users': 3092, 'num_interactions': 5934}
+Checking lamda: 20.0
+
+[EVALUATE] Starting evaluation with topk=[10, 100], test_set_eval=False
+[EVALUATE] Hyperparameters: num_users=3092, num_items=1305, lambda=20.0
+[EVALUATE] Train positive set size: 3092
+[EVALUATE] Prediction set size: 3092
+[EVALUATE] Processing users in batches of 20000
+[EVALUATE] Processing batch of users 0 to 3091 (total: 3092)
+[EVALUATE] Running forward pass for batch 0 to 3091
+[EVALUATE] Forward pass complete, prediction shape: (3092, 1305)
+[EVALUATE] Evaluating batch 0 to 3091
+[EVAL_BATCH] Starting batch evaluation with 3092 users
+[EVAL_BATCH] User 0: processing 5 positive and 50 negative examples
+[EVAL_BATCH] User 2000: processing 1 positive and 50 negative examples
+[EVAL_BATCH] Collected 20986 predictions for AUC calculation
+[EVAL_BATCH] Marking train-set consumed items as negative infinity
+[EVAL_BATCH] User 0: marking 43 train positive items as -INF
+[EVAL_BATCH] User 1000: marking 1 train positive items as -INF
+[EVAL_BATCH] User 2000: marking 3 train positive items as -INF
+[EVAL_BATCH] User 3000: marking 1 train positive items as -INF
+[EVAL_BATCH] Sorting indices for top-100 recommendations
+[EVAL_BATCH] Computing metrics for k=10
+[EVAL_BATCH] User 0, k=10: 0 hits out of 5.0 possible
+[EVAL_BATCH] User 2000, k=10: 1 hits out of 1.0 possible
+[EVAL_BATCH] k=10 metrics - Average HR: 0.0303, Average NDCG: 0.0188, Average PSP: 0.0296
+[EVAL_BATCH] Computing metrics for k=100
+[EVAL_BATCH] User 0, k=100: 1 hits out of 5.0 possible
+[EVAL_BATCH] User 2000, k=100: 1 hits out of 1.0 possible
+[EVAL_BATCH] k=100 metrics - Average HR: 0.0766, Average NDCG: 0.0280, Average PSP: 0.0750
+[EVAL_BATCH] Batch evaluation complete, returning 20986 predictions
+[EVALUATE] Batch evaluation complete
+[EVALUATE] Accumulated 20986 predictions and 20986 labels
+[EVALUATE] All batches processed, computing final metrics
+[EVALUATE] Computed AUC: 0.8236
+[EVALUATE] HR@10: 3.0293
+[EVALUATE] HR@100: 7.6606
+[EVALUATE] NDCG@10: 1.8768
+[EVALUATE] NDCG@100: 2.7987
+[EVALUATE] PSP@10: 2.9581
+[EVALUATE] PSP@100: 7.5013
+[EVALUATE] Final metrics: num_users=3092, num_interactions=5934
+val_metrics: {'HR@10': 3.0293, 'HR@100': 7.6606, 'NDCG@10': 1.8768, 'NDCG@100': 2.7987, 'PSP@10': 2.9581, 'PSP@100': 7.5013, 'GINI@10': 0.0, 'GINI@100': 0.0, 'AUC': 0.8236, 'num_users': 3092, 'num_interactions': 5934}
+Checking lamda: 50.0
+
+[EVALUATE] Starting evaluation with topk=[10, 100], test_set_eval=False
+[EVALUATE] Hyperparameters: num_users=3092, num_items=1305, lambda=50.0
+[EVALUATE] Train positive set size: 3092
+[EVALUATE] Prediction set size: 3092
+[EVALUATE] Processing users in batches of 20000
+[EVALUATE] Processing batch of users 0 to 3091 (total: 3092)
+[EVALUATE] Running forward pass for batch 0 to 3091
+[EVALUATE] Forward pass complete, prediction shape: (3092, 1305)
+[EVALUATE] Evaluating batch 0 to 3091
+[EVAL_BATCH] Starting batch evaluation with 3092 users
+[EVAL_BATCH] User 0: processing 5 positive and 50 negative examples
+[EVAL_BATCH] User 2000: processing 1 positive and 50 negative examples
+[EVAL_BATCH] Collected 20986 predictions for AUC calculation
+[EVAL_BATCH] Marking train-set consumed items as negative infinity
+[EVAL_BATCH] User 0: marking 43 train positive items as -INF
+[EVAL_BATCH] User 1000: marking 1 train positive items as -INF
+[EVAL_BATCH] User 2000: marking 3 train positive items as -INF
+[EVAL_BATCH] User 3000: marking 1 train positive items as -INF
+[EVAL_BATCH] Sorting indices for top-100 recommendations
+[EVAL_BATCH] Computing metrics for k=10
+[EVAL_BATCH] User 0, k=10: 0 hits out of 5.0 possible
+[EVAL_BATCH] User 2000, k=10: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=10 metrics - Average HR: 0.0263, Average NDCG: 0.0147, Average PSP: 0.0256
+[EVAL_BATCH] Computing metrics for k=100
+[EVAL_BATCH] User 0, k=100: 0 hits out of 5.0 possible
+[EVAL_BATCH] User 2000, k=100: 1 hits out of 1.0 possible
+[EVAL_BATCH] k=100 metrics - Average HR: 0.0733, Average NDCG: 0.0241, Average PSP: 0.0716
+[EVAL_BATCH] Batch evaluation complete, returning 20986 predictions
+[EVALUATE] Batch evaluation complete
+[EVALUATE] Accumulated 20986 predictions and 20986 labels
+[EVALUATE] All batches processed, computing final metrics
+[EVALUATE] Computed AUC: 0.8224
+[EVALUATE] HR@10: 2.6304
+[EVALUATE] HR@100: 7.3307
+[EVALUATE] NDCG@10: 1.4704
+[EVALUATE] NDCG@100: 2.407
+[EVALUATE] PSP@10: 2.5634
+[EVALUATE] PSP@100: 7.1563
+[EVALUATE] Final metrics: num_users=3092, num_interactions=5934
+val_metrics: {'HR@10': 2.6304, 'HR@100': 7.3307, 'NDCG@10': 1.4704, 'NDCG@100': 2.407, 'PSP@10': 2.5634, 'PSP@100': 7.1563, 'GINI@10': 0.0, 'GINI@100': 0.0, 'AUC': 0.8224, 'num_users': 3092, 'num_interactions': 5934}
+Checking lamda: 100.0
+
+[EVALUATE] Starting evaluation with topk=[10, 100], test_set_eval=False
+[EVALUATE] Hyperparameters: num_users=3092, num_items=1305, lambda=100.0
+[EVALUATE] Train positive set size: 3092
+[EVALUATE] Prediction set size: 3092
+[EVALUATE] Processing users in batches of 20000
+[EVALUATE] Processing batch of users 0 to 3091 (total: 3092)
+[EVALUATE] Running forward pass for batch 0 to 3091
+[EVALUATE] Forward pass complete, prediction shape: (3092, 1305)
+[EVALUATE] Evaluating batch 0 to 3091
+[EVAL_BATCH] Starting batch evaluation with 3092 users
+[EVAL_BATCH] User 0: processing 5 positive and 50 negative examples
+[EVAL_BATCH] User 2000: processing 1 positive and 50 negative examples
+[EVAL_BATCH] Collected 20986 predictions for AUC calculation
+[EVAL_BATCH] Marking train-set consumed items as negative infinity
+[EVAL_BATCH] User 0: marking 43 train positive items as -INF
+[EVAL_BATCH] User 1000: marking 1 train positive items as -INF
+[EVAL_BATCH] User 2000: marking 3 train positive items as -INF
+[EVAL_BATCH] User 3000: marking 1 train positive items as -INF
+[EVAL_BATCH] Sorting indices for top-100 recommendations
+[EVAL_BATCH] Computing metrics for k=10
+[EVAL_BATCH] User 0, k=10: 0 hits out of 5.0 possible
+[EVAL_BATCH] User 2000, k=10: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=10 metrics - Average HR: 0.0195, Average NDCG: 0.0116, Average PSP: 0.0188
+[EVAL_BATCH] Computing metrics for k=100
+[EVAL_BATCH] User 0, k=100: 0 hits out of 5.0 possible
+[EVAL_BATCH] User 2000, k=100: 1 hits out of 1.0 possible
+[EVAL_BATCH] k=100 metrics - Average HR: 0.0723, Average NDCG: 0.0223, Average PSP: 0.0706
+[EVAL_BATCH] Batch evaluation complete, returning 20986 predictions
+[EVALUATE] Batch evaluation complete
+[EVALUATE] Accumulated 20986 predictions and 20986 labels
+[EVALUATE] All batches processed, computing final metrics
+[EVALUATE] Computed AUC: 0.8189
+[EVALUATE] HR@10: 1.9513
+[EVALUATE] HR@100: 7.2337
+[EVALUATE] NDCG@10: 1.1601
+[EVALUATE] NDCG@100: 2.2271
+[EVALUATE] PSP@10: 1.8842
+[EVALUATE] PSP@100: 7.0593
+[EVALUATE] Final metrics: num_users=3092, num_interactions=5934
+val_metrics: {'HR@10': 1.9513, 'HR@100': 7.2337, 'NDCG@10': 1.1601, 'NDCG@100': 2.2271, 'PSP@10': 1.8842, 'PSP@100': 7.0593, 'GINI@10': 0.0, 'GINI@100': 0.0, 'AUC': 0.8189, 'num_users': 3092, 'num_interactions': 5934}
+
+[EVALUATE] Starting evaluation with topk=[10, 100], test_set_eval=True
+[EVALUATE] Hyperparameters: num_users=3092, num_items=1305, lambda=20.0
+[EVALUATE] Train positive set size: 3092
+[EVALUATE] Adding validation positive set to train positive set for test evaluation
+[EVALUATE] Adding validation matrix to evaluation context
+[EVALUATE] Using test positive set for prediction
+[EVALUATE] Prediction set size: 3092
+[EVALUATE] Processing users in batches of 20000
+[EVALUATE] Processing batch of users 0 to 3091 (total: 3092)
+[EVALUATE] Running forward pass for batch 0 to 3091
+[EVALUATE] Forward pass complete, prediction shape: (3092, 1305)
+[EVALUATE] Evaluating batch 0 to 3091
+[EVAL_BATCH] Starting batch evaluation with 3092 users
+[EVAL_BATCH] User 0: processing 7 positive and 50 negative examples
+[EVAL_BATCH] User 1000: processing 2 positive and 50 negative examples
+[EVAL_BATCH] User 2000: processing 2 positive and 50 negative examples
+[EVAL_BATCH] User 3000: processing 2 positive and 50 negative examples
+[EVAL_BATCH] Collected 160745 predictions for AUC calculation
+[EVAL_BATCH] Marking train-set consumed items as negative infinity
+[EVAL_BATCH] User 0: marking 48 train positive items as -INF
+[EVAL_BATCH] User 1000: marking 1 train positive items as -INF
+[EVAL_BATCH] User 2000: marking 4 train positive items as -INF
+[EVAL_BATCH] User 3000: marking 1 train positive items as -INF
+[EVAL_BATCH] Sorting indices for top-100 recommendations
+[EVAL_BATCH] Computing metrics for k=10
+[EVAL_BATCH] User 0, k=10: 0 hits out of 7.0 possible
+[EVAL_BATCH] User 1000, k=10: 0 hits out of 2.0 possible
+[EVAL_BATCH] User 2000, k=10: 0 hits out of 2.0 possible
+[EVAL_BATCH] User 3000, k=10: 1 hits out of 2.0 possible
+[EVAL_BATCH] k=10 metrics - Average HR: 0.2553, Average NDCG: 0.2209, Average PSP: 0.1242
+[EVAL_BATCH] Computing metrics for k=100
+[EVAL_BATCH] User 0, k=100: 4 hits out of 7.0 possible
+[EVAL_BATCH] User 1000, k=100: 2 hits out of 2.0 possible
+[EVAL_BATCH] User 2000, k=100: 0 hits out of 2.0 possible
+[EVAL_BATCH] User 3000, k=100: 2 hits out of 2.0 possible
+[EVAL_BATCH] k=100 metrics - Average HR: 0.6104, Average NDCG: 0.3061, Average PSP: 0.2930
+[EVAL_BATCH] Batch evaluation complete, returning 160745 predictions
+[EVALUATE] Batch evaluation complete
+[EVALUATE] Accumulated 160745 predictions and 160745 labels
+[EVALUATE] All batches processed, computing final metrics
+[EVALUATE] Computed AUC: 0.8536
+[EVALUATE] HR@10: 25.5255
+[EVALUATE] HR@100: 61.0362
+[EVALUATE] NDCG@10: 22.0924
+[EVALUATE] NDCG@100: 30.6117
+[EVALUATE] PSP@10: 12.418
+[EVALUATE] PSP@100: 29.2982
+[EVALUATE] Final metrics: num_users=3092, num_interactions=5934
+| end of step    0 | time =  7.66 | HR@10 = 25.5255 | HR@100 = 61.0362 | NDCG@10 = 22.0924 | NDCG@100 = 30.6117 | PSP@10 = 12.4180 | PSP@100 = 29.2982 | GINI@10 = 0.0000 | GINI@100 = 0.0000 | AUC = 0.8536 | num_users = 3092.0000 | num_interactions = 5934.0000 (TEST)
+
+JOB STATISTICS
+==============
+Job ID: 12226749
+Cluster: snellius
+User/Group: scur2748/scur2748
+State: RUNNING
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 00:07:48 core-walltime
+Job Wall-clock time: 00:00:26
+Memory Utilized: 0.00 MB
+Memory Efficiency: 0.00% of 120.00 GB (120.00 GB/node)
+WARNING: Efficiency statistics can only be obtained after the job has ended as seff tool is based on the accounting database data.
