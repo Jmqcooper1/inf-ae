@@ -247,13 +247,24 @@ if __name__ == "__main__":
 
     elif dataset == "netflix":
         total_data = prep_recbole(
-        BASE_PATH + "/netflix/netflix_25k.inter",
-        "user_id:token",
-        "item_id:token",
-        "rating:float",
-        item_file_path="",  # or use a dummy path
-        item_id_2="item_id:token",
-)
+            BASE_PATH + "/netflix/netflix.inter",
+            "user_id:token",
+            "item_id:token",
+            "rating:float",
+            item_file_path="",  # no item file needed
+            item_id_2="item_id:token",
+        )
+
+    elif dataset == "ml-20m":
+        total_data = prep_recbole(
+            BASE_PATH + "/ml-20m/ml-20m.inter",
+            "user_id:token",
+            "item_id:token",
+            "rating:float",
+            item_file_path="",  # no item file needed
+            item_id_2="item_id:token",
+        )
+
     else:
         raise Exception("Could not understand this dataset")
 

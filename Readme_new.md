@@ -26,10 +26,16 @@ sbatch install_environment.job
 
 #### Data Setup
 
-This repository already includes the pre-processed data for ML-1M, Amazon Magazine, Netflix, and Douban. The code used for pre-processing these datasets is in `preprocess.py`.
+This repository already includes the pre-processed data for ML-1M, Amazon Magazine, Steam, and Douban. The code used for pre-processing these datasets is in `preprocess.py`.
 
 In case a user wants to pre-process a datatset themselves, follow these steps:
 - Import a .inter file of the desired dataset
+- Optional; In case the desired dataset is not in 3-core format:
+    - Go to make_3core.job and add the name of your dataset in the final line
+    - Run the command 'sbatch make_3core.job'
+- Optional; In case the .inter dataset you are working with is too large:
+    - Go to cut_dataset.job and add the name of your dataset in the final line
+    - Run the command 'sbatch cut_dataset.py'
 - Go to get_hdf5_npz_data.job and replace the dataset name in line 19 with the dataset of your liking (ml-1m, netflix, steam)
 - Run the following command line: sbatch get_hdf5_npz_data.job
 - The respective .hdf5 and .npz output file are then placed in the 'data' folder
@@ -62,20 +68,24 @@ sbatch install_environment.job
 
 #### Data Setup
 
-This repository already includes the pre-processed data for ML-1M, Amazon Magazine, Netflix, and Douban. The code used for pre-processing these datasets is in `preprocess.py`.
+This repository already includes the pre-processed data for ML-1M, Amazon Magazine, Steam, and Douban. The code used for pre-processing these datasets is in `preprocess.py`.
 
 In case a user wants to pre-process a datatset themselves, follow these steps:
 - Import a .inter file of the desired dataset
+- Optional; In case the desired dataset is not in 3-core format:
+    - Go to make_3core.job and add the name of your dataset in the final line
+    - Run the command 'sbatch make_3core.job'
+- Optional; In case the .inter dataset you are working with is too large:
+    - Go to cut_dataset.job and add the name of your dataset in the final line
+    - Run the command 'sbatch cut_dataset.py'
 - Go to get_hdf5_npz_data.job and replace the dataset name in line 19 with the dataset of your liking (ml-1m, netflix, steam)
 - Run the following command line: sbatch get_hdf5_npz_data.job
 - The respective .hdf5 and .npz output file are then placed in the 'data' folder
 
----
-
 #### How to train EASE?
 
 - Run the following command line: sbatch run_ease.job
-- This job file makes use of the 
+- This job file evaluates all datasets simultaniously
 
 ---
 

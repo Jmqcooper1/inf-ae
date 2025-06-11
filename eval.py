@@ -4,10 +4,13 @@ import jax.numpy as jnp
 from numba import jit, float64
 
 import numpy as np
+import math
+from collections import Counter
 
 from hyper_params import hyper_params
 
 USE_GINI = hyper_params["use_gini"]
+USE_UNFAIRNESS = hyper_params["use_unfairness_gap"]
 
 
 class GiniCoefficient:
@@ -51,6 +54,21 @@ class GiniCoefficient:
             freqs[val] = freqs.get(val, 0) + 1
         print(f"[GINI] Found {len(freqs)} unique {key} values")
         return self.gini_coefficient(list(freqs.values()))
+
+
+def compute_shannon_entropy(user_recommendations, total_users):
+    item_counts = Counter()
+    for recs in user_recommendations.values():
+        for rec in recs:
+            item_counts[rec["id"]] += 1
+
+    entropy = 0.0
+    for count in item_counts.values():
+        p = count / total_users
+        entropy -= p * math.log2(p)
+
+    max_entropy = math.log2(len(item_counts)) if len(item_counts) > 0 else 1.0
+    return entropy, entropy / max_entropy
 
 
 INF = float(1e6)
@@ -106,6 +124,19 @@ def evaluate(
 
     user_recommendations = {}
 
+    if USE_UNFAIRNESS:
+            # Count how many interactions each user had in training data
+            user_interaction_counts = np.array([len(x) for x in train_positive_list])
+
+            # Split users into active / inactive groups
+            num_active = max(1, int(0.05 * len(user_interaction_counts)))
+            sorted_indices = np.argsort(-user_interaction_counts)
+
+            user_groups = {
+            "active": list(sorted_indices[:num_active]),
+            "inactive": list(sorted_indices[num_active:])}
+            per_user_ndcg = np.zeros(hyper_params["num_users"])
+
     bsz = 20_000  # These many users
     print(f"[EVALUATE] Processing users in batches of {bsz}")
 
@@ -133,18 +164,18 @@ def evaluate(
             topk,
             metrics,
             data,
+            per_user_ndcg = per_user_ndcg[i:batch_end] if USE_UNFAIRNESS else None,
         )
         print(f"[EVALUATE] Batch evaluation complete")
 
-        if USE_GINI:
-            # Accumulate item exposures for GINI calculation
-            for k in topk:
-                if k not in user_recommendations:
-                    user_recommendations[k] = []
-                user_recommendations[k] += user_recommendations_batch[k]
-                print(
-                    f"[EVALUATE] Accumulated {len(user_recommendations_batch[k])} recommendations for k={k}"
-                )
+        # Accumulate item exposures for GINI calculation
+        for k in topk:
+            if k not in user_recommendations:
+                user_recommendations[k] = []
+            user_recommendations[k] += user_recommendations_batch[k]
+            print(
+                f"[EVALUATE] Accumulated {len(user_recommendations_batch[k])} recommendations for k={k}"
+            )
 
         preds += temp_preds
         y_binary += temp_y
@@ -171,6 +202,14 @@ def evaluate(
             )
             print(f"[EVALUATE] {kind}@{k}: {metrics['{}@{}'.format(kind, k)]}")
 
+    for k in topk:
+        entropy, normalized_entropy = compute_shannon_entropy(
+            {u: [rec] for u, rec in enumerate(user_recommendations[k])},
+            hyper_params["num_users"]
+        )
+        metrics[f"ShannonEntropy@{k}"] = round(normalized_entropy, 4)
+
+
     if USE_GINI:
         print("[EVALUATE] Computing GINI coefficients")
         for k in topk:
@@ -182,12 +221,22 @@ def evaluate(
             )
             print(f"[EVALUATE] GINI@{k}: {metrics['GINI@{}'.format(k)]}")
 
+
+    if USE_UNFAIRNESS:
+        active_scores = per_user_ndcg[user_groups["active"]]
+        inactive_scores = per_user_ndcg[user_groups["inactive"]]
+        unfairness_gap = abs(active_scores.mean() - inactive_scores.mean())
+        key = f"UnfairnessGap@{topk[0]}"
+        metrics[key] = round(unfairness_gap, 4)
+        print(f"[EVALUATE] {key}: {metrics[key]:.4f}"
+              f"(Active avg={active_scores.mean():.4f}, Inactive avg={inactive_scores.mean():.4f})")
+
     metrics["num_users"] = int(train_x.shape[0])
     metrics["num_interactions"] = int(jnp.count_nonzero(train_x.astype(np.int8)))
     print(
         f"[EVALUATE] Final metrics: num_users={metrics['num_users']}, num_interactions={metrics['num_interactions']}"
     )
-
+    
     return metrics
 
 
@@ -201,6 +250,7 @@ def evaluate_batch(
     metrics,
     data,
     train_metrics=False,
+    per_user_ndcg=None,
 ):
     print(f"[EVAL_BATCH] Starting batch evaluation with {len(logits)} users")
 
@@ -253,7 +303,7 @@ def evaluate_batch(
                     user_recommendations[k].append(
                         {
                             "id": item_idx + 1,
-                            "category": data.data["item_map_to_category"][item_idx + 1],
+                            "category": data.data["item_map_to_category"].get(item_idx + 1, "UNKNOWN"),
                         }
                     )
 
@@ -286,6 +336,10 @@ def evaluate_batch(
 
             ndcg = dcg / idcg if idcg > 0 else 0
             psp_norm = psp / max_psp if max_psp > 0 else 0
+
+            # Save users ndcg
+            if per_user_ndcg is not None:
+                per_user_ndcg[b] = ndcg
 
             ndcg_sum += ndcg
             psp_sum += psp_norm

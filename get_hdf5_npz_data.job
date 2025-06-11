@@ -3,7 +3,7 @@
 #SBATCH --partition=gpu_a100
 #SBATCH --gpus=1
 #SBATCH --job-name=run_hdf5_npz_data
-#SBATCH --time=0:59:00
+#SBATCH --time=04:00:00
 #SBATCH --output=./slurm_out/run_hdf5_npz_%j.out
 
 #exit if an error occurs
@@ -16,4 +16,4 @@ module load CUDA/12.6.0
 
 source activate inf-ae
 
-python preprocess.py netflix
+python preprocess.py ml-20m

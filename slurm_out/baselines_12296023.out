@@ -1,0 +1,157 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+2025-06-11 23:07:33.025888: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-06-11 23:07:33.095089: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2025-06-11 23:07:33.284160: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-06-11 23:07:35.134725: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+11 Jun 23:07    INFO  ['baselines/run_baselines.py']
+11 Jun 23:07    INFO  
+General Hyper Parameters:
+gpu_id = 0
+use_gpu = True
+seed = 2020
+state = INFO
+reproducibility = True
+data_path = /gpfs/home5/scur2748/inf-ae/data/steam/steam
+checkpoint_dir = saved
+show_progress = True
+save_dataset = False
+dataset_save_path = None
+save_dataloaders = False
+dataloaders_save_path = None
+log_wandb = False
+
+Training Hyper Parameters:
+epochs = 300
+train_batch_size = 2048
+learner = adam
+learning_rate = 0.001
+train_neg_sample_args = {'distribution': 'none', 'sample_num': 'none', 'alpha': 'none', 'dynamic': False, 'candidate_num': 0}
+eval_step = 1
+stopping_step = 10
+clip_grad_norm = None
+weight_decay = 0.0
+loss_decimal_place = 4
+
+Evaluation Hyper Parameters:
+eval_args = {'split': {'RS': [0.8, 0.1, 0.1]}, 'order': 'RO', 'group_by': 'user', 'mode': {'valid': 'full', 'test': 'full'}}
+repeatable = False
+metrics = ['NDCG']
+topk = [10, 100]
+valid_metric = NDCG@10
+valid_metric_bigger = True
+eval_batch_size = 4096
+metric_decimal_place = 4
+
+Dataset Hyper Parameters:
+field_separator = 	
+seq_separator =  
+USER_ID_FIELD = user_id
+ITEM_ID_FIELD = item_id
+RATING_FIELD = rating
+TIME_FIELD = timestamp
+seq_len = None
+LABEL_FIELD = label
+threshold = None
+NEG_PREFIX = neg_
+load_col = {'inter': ['user_id', 'item_id', 'rating']}
+unload_col = None
+unused_col = None
+additional_feat_suffix = None
+rm_dup_inter = None
+val_interval = None
+filter_inter_by_user_or_item = True
+user_inter_num_interval = [0,inf)
+item_inter_num_interval = [0,inf)
+alias_of_user_id = None
+alias_of_item_id = None
+alias_of_entity_id = None
+alias_of_relation_id = None
+preload_weight = None
+normalize_field = None
+normalize_all = None
+ITEM_LIST_LENGTH_FIELD = item_length
+LIST_SUFFIX = _list
+MAX_ITEM_LIST_LENGTH = 50
+POSITION_FIELD = position_id
+HEAD_ENTITY_ID_FIELD = head_id
+TAIL_ENTITY_ID_FIELD = tail_id
+RELATION_ID_FIELD = relation_id
+ENTITY_ID_FIELD = entity_id
+benchmark_filename = None
+
+Other Hyper Parameters: 
+worker = 0
+wandb_project = recbole
+shuffle = True
+require_pow = False
+enable_amp = False
+enable_scaler = False
+transform = None
+mlp_hidden_size = [600]
+latent_dimension = 128
+dropout_prob = 0.5
+anneal_cap = 0.2
+total_anneal_steps = 200000
+numerical_features = []
+discretization = None
+kg_reverse_r = False
+entity_kg_num_interval = [0,inf)
+relation_kg_num_interval = [0,inf)
+MODEL_TYPE = ModelType.GENERAL
+eval_setting = RO
+MODEL_INPUT_TYPE = InputType.PAIRWISE
+eval_type = EvaluatorType.RANKING
+single_spec = True
+local_rank = 0
+device = cuda
+valid_neg_sample_args = {'distribution': 'uniform', 'sample_num': 'none'}
+test_neg_sample_args = {'distribution': 'uniform', 'sample_num': 'none'}
+
+
+Traceback (most recent call last):
+  File "/gpfs/home5/scur2748/inf-ae/baselines/run_baselines.py", line 62, in <module>
+    run_recbole(config_dict=parameter_dict)
+  File "/home/scur2748/.conda/envs/baselines/lib/python3.9/site-packages/recbole/quick_start/quick_start.py", line 129, in run_recbole
+    dataset = create_dataset(config)
+  File "/home/scur2748/.conda/envs/baselines/lib/python3.9/site-packages/recbole/data/utils.py", line 72, in create_dataset
+    dataset = dataset_class(config)
+  File "/home/scur2748/.conda/envs/baselines/lib/python3.9/site-packages/recbole/data/dataset/dataset.py", line 108, in __init__
+    self._from_scratch()
+  File "/home/scur2748/.conda/envs/baselines/lib/python3.9/site-packages/recbole/data/dataset/dataset.py", line 118, in _from_scratch
+    self._load_data(self.dataset_name, self.dataset_path)
+  File "/home/scur2748/.conda/envs/baselines/lib/python3.9/site-packages/recbole/data/dataset/dataset.py", line 267, in _load_data
+    self._download()
+  File "/home/scur2748/.conda/envs/baselines/lib/python3.9/site-packages/recbole/data/dataset/dataset.py", line 234, in _download
+    url = self._get_download_url("url")
+  File "/home/scur2748/.conda/envs/baselines/lib/python3.9/site-packages/recbole/data/dataset/dataset.py", line 227, in _get_download_url
+    raise ValueError(
+ValueError: Neither [/gpfs/home5/scur2748/inf-ae/data/steam/steam] exists in the device nor [steam] a known dataset name.
+
+JOB STATISTICS
+==============
+Job ID: 12296023
+Cluster: snellius
+User/Group: scur2748/scur2748
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:10
+CPU Efficiency: 2.22% of 00:07:30 core-walltime
+Job Wall-clock time: 00:00:25
+Memory Utilized: 1.62 MB
+Memory Efficiency: 0.00% of 120.00 GB (120.00 GB/node)

@@ -22,6 +22,12 @@ def train(hyper_params, data):
         hyper_params["user_support"]
     )  # Random user sample
 
+    # The 4 lines below reduce the matrix size so it suits the batch size in model.py
+    batch_size = 110
+    num_rows = sampled_matrix.shape[0]
+    trimmed_rows = num_rows - (num_rows % batch_size)
+    sampled_matrix = sampled_matrix[:trimmed_rows]
+
     """
     NOTE: No training required! We will compute dual-variables \alpha on the fly in `kernelized_rr_forward`
           However, if we needed to perform evaluation multiple times, we could pre-compute \alpha like so:
@@ -53,9 +59,11 @@ def train(hyper_params, data):
     ):
         print("Checking lamda:", lamda)
         hyper_params["lamda"] = lamda
+
         val_metrics = evaluate(
             hyper_params, kernelized_rr_forward, data, item_propensity, sampled_matrix
         )
+    
         print("val_metrics:", val_metrics)
         if (best_metric is None) or (val_metrics[VAL_METRIC] > best_metric):
             best_metric, best_lamda = val_metrics[VAL_METRIC], lamda

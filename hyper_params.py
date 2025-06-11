@@ -29,10 +29,11 @@
 #}
 
 hyper_params = {
-    "dataset": "magazine",
-    "item_id": None,         # Disable use of item metadata
-    "category_id": None,     # Disable use of category metadata
+    "dataset": "ml-1m",            # Dataset name
+    "item_id": "item_id:token",         # Disable use of item metadata
+    "category_id": "genre:token_seq",     # Disable use of category metadata
     "use_gini": False,       # Avoid need to compute item-level stats
+    "use_unfairness_gap": True,  # Avoid need to compute unfairness gap
     "float64": False,
     "depth": 1,
     "grid_search_lamda": True,
@@ -40,3 +41,4 @@ hyper_params = {
     "user_support": -1,
     "seed": 42,
 }
+

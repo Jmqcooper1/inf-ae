@@ -2,6 +2,7 @@ import jax
 import functools
 from jax import scipy as sp
 from jax import numpy as jnp
+import neural_tangents as nt
 from neural_tangents import stax
 
 
@@ -10,7 +11,7 @@ def make_kernelized_rr_forward(hyper_params):
         depth=hyper_params["depth"], num_classes=hyper_params["num_items"]
     )
     # NOTE: Un-comment this if the dataset size is very big (didn't need it for experiments in the paper)
-    # kernel_fn = nt.batch(kernel_fn, batch_size=128)
+    #kernel_fn = nt.batch(kernel_fn, batch_size= 10) #110
     kernel_fn = functools.partial(kernel_fn, get="ntk")
 
     @jax.jit
