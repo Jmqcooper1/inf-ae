@@ -1,0 +1,20 @@
+# Basic configuration
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: item_id
+RATING_FIELD: rating
+field_separator: "\t"
+
+# Data loading settings for our custom .inter files
+# We let RecBole infer column types from the headers of the .inter files.
+# This is more robust as our script already generates files with correct headers.
+
+# Evaluation settings
+# We now let the runner script handle the data splitting configuration.
+metrics: ['Recall', 'Precision', 'NDCG', 'Hit', 'MRR']
+topk: [10, 100]
+valid_metric: NDCG@10
+metric_decimal_place: 4
+
+# Reproducibility
+seed: 42
+reproducibility: True 

@@ -1,0 +1,41 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+
+▶ Running EASE on ml-1m...
+✅ Results for ml-1m: {'HR@10': np.float64(0.1304), 'NDCG@10': np.float64(0.1616), 'PSP@10': np.float64(0.1304), 'HR@100': np.float64(0.0541), 'NDCG@100': np.float64(0.2409), 'AUC': np.float64(0.6654), 'Users evaluated': 6040}
+
+▶ Running EASE on douban...
+✅ Results for douban: {'HR@10': np.float64(0.1011), 'NDCG@10': np.float64(0.1108), 'PSP@10': np.float64(0.1011), 'HR@100': np.float64(0.0609), 'NDCG@100': np.float64(0.1327), 'AUC': np.float64(0.5984), 'Users evaluated': 2666}
+
+▶ Running EASE on steam...
+✅ Results for steam: {'HR@10': np.float64(0.0017), 'NDCG@10': np.float64(0.0059), 'PSP@10': np.float64(0.0017), 'HR@100': np.float64(0.0011), 'NDCG@100': np.float64(0.0167), 'AUC': np.float64(0.5733), 'Users evaluated': 1100}
+
+▶ Running EASE on magazine...
+✅ Results for magazine: {'HR@10': np.float64(0.0454), 'NDCG@10': np.float64(0.2079), 'PSP@10': np.float64(0.0454), 'HR@100': np.float64(0.0089), 'NDCG@100': np.float64(0.2613), 'AUC': np.float64(0.7945), 'Users evaluated': 3092}
+
+JOB STATISTICS
+==============
+Job ID: 12224002
+Cluster: snellius
+User/Group: scur2748/scur2748
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:27:16
+CPU Efficiency: 51.94% of 00:52:30 core-walltime
+Job Wall-clock time: 00:02:55
+Memory Utilized: 29.98 GB
+Memory Efficiency: 24.99% of 120.00 GB (120.00 GB/node)

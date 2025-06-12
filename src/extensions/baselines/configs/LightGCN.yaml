@@ -1,0 +1,13 @@
+# LightGCN-specific configuration
+
+# By default, LightGCN in RecBole might assume a single interaction file.
+# We must override the 'load_col' parameter to disable this behavior and
+# ensure it uses our pre-split .train, .valid, and .test files.
+load_col: ~
+
+# LightGCN Hyperparameters
+# These are some common hyperparameters you might want to tune.
+# We can leave them commented out to use RecBole's defaults for now.
+# embedding_size: 64
+# n_layers: 2
+# reg_weight: 1e-4

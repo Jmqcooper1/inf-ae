@@ -18,5 +18,4 @@ module load CUDA/12.6.0
 
 source activate baselines
 
-# conda install -c conda-forge tensorflow=2.12.0 numpy=1.23.5 pandas=1.5.3 h5py=3.6.0 -y
 python baselines/run_baselines.py

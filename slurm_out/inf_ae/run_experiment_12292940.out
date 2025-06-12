@@ -1,0 +1,480 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Creating Data
+Using default paths: data_path=data/steam/total_data.hdf5, index_path=data/steam/index.npz
+Loading data from data/steam/total_data.hdf5
+Loaded raw data with shape: (31075, 3)
+Loading index from data/steam/index.npz
+Loaded index with shape: (31075,)
+Remapping user and item IDs
+Identifying valid users and items
+Scanning for valid entries:   0%|          | 0/31075 [00:00<?, ?it/s]Scanning for valid entries: 100%|██████████| 31075/31075 [00:00<00:00, 904346.24it/s]
+Found 1100 valid users and 2431 valid items
+User and item mapping created
+Creating new data and index arrays with mapped IDs
+Remapping data:   0%|          | 0/31075 [00:00<?, ?it/s]Remapping data: 100%|██████████| 31075/31075 [00:00<00:00, 856968.13it/s]
+Remapped data shape: (5545, 3), index shape: (5545,)
+Loading item data
+Using default item_path: data/steam/steam.item
+Reading item data from data/steam/steam.item
+Loaded item data with shape: (5, 13)
+Reading item data from data/steam/steam.item
+Loaded item data with shape: (5, 13)
+Creating train/val/test splits
+Selecting data with index value 0
+Found 2939 entries with index value 0
+Selecting data with index value 1
+Found 279 entries with index value 1
+Selecting data with index value 2
+Found 2327 entries with index value 2
+Split sizes - Train: 2939, Val: 279, Test: 2327
+Dataset has 1100 users and 2431 items
+Cleaning up memory
+Creating positive sets for train/val/test
+Creating user history from array with shape (2939, 3)
+Building user history:   0%|          | 0/2939 [00:00<?, ?it/s]Building user history: 100%|██████████| 2939/2939 [00:00<00:00, 780539.45it/s]
+User history stats - Min: 1, Max: 80, Avg: 2.58
+Creating user history from array with shape (279, 3)
+Building user history:   0%|          | 0/279 [00:00<?, ?it/s]Building user history: 100%|██████████| 279/279 [00:00<00:00, 753031.41it/s]
+User history stats - Min: 0, Max: 10, Avg: 0.25
+Creating user history from array with shape (2327, 3)
+Building user history:   0%|          | 0/2327 [00:00<?, ?it/s]Building user history: 100%|██████████| 2327/2327 [00:00<00:00, 798049.50it/s]
+User history stats - Min: 1, Max: 12, Avg: 1.85
+Creating sparse matrices
+Created train matrix with shape (1100, 2431) and 2838 non-zeros
+Created val matrix with shape (1100, 2431) and 278 non-zeros
+Generating negative samples for evaluation
+Generating negatives:   0%|          | 0/1100 [00:00<?, ?it/s]Generating negatives:  77%|███████▋  | 852/1100 [00:00<00:00, 8512.62it/s]Generating negatives: 100%|██████████| 1100/1100 [00:00<00:00, 8506.41it/s]
+2025-06-11 18:16:44.163942: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1749658604.206747  271101 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1749658604.224393  271101 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1749658604.328846  271101 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1749658604.328937  271101 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1749658604.328942  271101 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1749658604.328946  271101 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+Generated negative samples with shape (1100, 50)
+Dataset loading complete. Summary:
+# users: 1100
+# items: 2431
+# interactions: 2939
+# unique genres: 10
+Start training!
+Get item propensity!
+Checking lamda: 0.0
+
+[EVALUATE] Starting evaluation with topk=[10, 100], test_set_eval=False
+[EVALUATE] Hyperparameters: num_users=1100, num_items=2431, lambda=0.0
+[EVALUATE] Train positive set size: 1100
+[EVALUATE] Prediction set size: 1100
+[EVALUATE] Processing users in batches of 20000
+[EVALUATE] Processing batch of users 0 to 1099 (total: 1100)
+[EVALUATE] Running forward pass for batch 0 to 1099
+[EVALUATE] Forward pass complete, prediction shape: (1100, 2431)
+[EVALUATE] Evaluating batch 0 to 1099
+[EVAL_BATCH] Starting batch evaluation with 1100 users
+[EVAL_BATCH] User 0: processing 1 positive and 50 negative examples
+[EVAL_BATCH] Collected 10228 predictions for AUC calculation
+[EVAL_BATCH] Marking train-set consumed items as negative infinity
+[EVAL_BATCH] User 0: marking 3 train positive items as -INF
+[EVAL_BATCH] User 1000: marking 1 train positive items as -INF
+[EVAL_BATCH] Sorting indices for top-100 recommendations
+[EVAL_BATCH] Computing metrics for k=10
+[EVAL_BATCH] User 0, k=10: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=10 metrics - Average HR: 0.0025, Average NDCG: 0.0010, Average PSP: 0.0021
+[EVAL_BATCH] Collected 11000 recommendations for k=10
+[EVAL_BATCH] Computing metrics for k=100
+[EVAL_BATCH] User 0, k=100: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=100 metrics - Average HR: 0.0108, Average NDCG: 0.0027, Average PSP: 0.0096
+[EVAL_BATCH] Collected 110000 recommendations for k=100
+[EVAL_BATCH] Batch evaluation complete, returning 10228 predictions
+[EVALUATE] Batch evaluation complete
+[EVALUATE] Accumulated 11000 recommendations for k=10
+[EVALUATE] Accumulated 110000 recommendations for k=100
+[EVALUATE] Accumulated 10228 predictions and 10228 labels
+[EVALUATE] All batches processed, computing final metrics
+[EVALUATE] Computed AUC: 0.5108
+[EVALUATE] HR@10: 0.25
+[EVALUATE] HR@100: 1.0751
+[EVALUATE] NDCG@10: 0.1007
+[EVALUATE] NDCG@100: 0.2725
+[EVALUATE] PSP@10: 0.2063
+[EVALUATE] PSP@100: 0.9596
+[EVALUATE] Computing GINI coefficients
+[EVALUATE] Computing GINI@10 with 11000 recommendations
+[GINI] Calculating Gini for 11000 articles using key 'category'
+[GINI] Found 1 unique category values
+[GINI] Computing Gini coefficient for 1 values
+[GINI] Computed Gini coefficient: 0.0000
+[EVALUATE] GINI@10: 0.0
+[EVALUATE] Computing GINI@100 with 110000 recommendations
+[GINI] Calculating Gini for 110000 articles using key 'category'
+[GINI] Found 1 unique category values
+[GINI] Computing Gini coefficient for 1 values
+[GINI] Computed Gini coefficient: 0.0000
+[EVALUATE] GINI@100: 0.0
+[EVALUATE] Final metrics: num_users=1100, num_interactions=2838
+[EVALUATE] UnfairnessGap@10: 0.0113(Active avg=0.0134, Inactive avg=0.0022)
+val_metrics: {'HR@10': 0.25, 'HR@100': 1.0751, 'NDCG@10': 0.1007, 'NDCG@100': 0.2725, 'PSP@10': 0.2063, 'PSP@100': 0.9596, 'GINI@10': np.float64(0.0), 'GINI@100': np.float64(0.0), 'AUC': 0.5108, 'num_users': 1100, 'num_interactions': 2838, 'UnfairnessGap@10': np.float64(0.0113)}
+Checking lamda: 1.0
+
+[EVALUATE] Starting evaluation with topk=[10, 100], test_set_eval=False
+[EVALUATE] Hyperparameters: num_users=1100, num_items=2431, lambda=1.0
+[EVALUATE] Train positive set size: 1100
+[EVALUATE] Prediction set size: 1100
+[EVALUATE] Processing users in batches of 20000
+[EVALUATE] Processing batch of users 0 to 1099 (total: 1100)
+[EVALUATE] Running forward pass for batch 0 to 1099
+[EVALUATE] Forward pass complete, prediction shape: (1100, 2431)
+[EVALUATE] Evaluating batch 0 to 1099
+[EVAL_BATCH] Starting batch evaluation with 1100 users
+[EVAL_BATCH] User 0: processing 1 positive and 50 negative examples
+[EVAL_BATCH] Collected 10228 predictions for AUC calculation
+[EVAL_BATCH] Marking train-set consumed items as negative infinity
+[EVAL_BATCH] User 0: marking 3 train positive items as -INF
+[EVAL_BATCH] User 1000: marking 1 train positive items as -INF
+[EVAL_BATCH] Sorting indices for top-100 recommendations
+[EVAL_BATCH] Computing metrics for k=10
+[EVAL_BATCH] User 0, k=10: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=10 metrics - Average HR: 0.0056, Average NDCG: 0.0035, Average PSP: 0.0049
+[EVAL_BATCH] Collected 11000 recommendations for k=10
+[EVAL_BATCH] Computing metrics for k=100
+[EVAL_BATCH] User 0, k=100: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=100 metrics - Average HR: 0.0164, Average NDCG: 0.0057, Average PSP: 0.0127
+[EVAL_BATCH] Collected 110000 recommendations for k=100
+[EVAL_BATCH] Batch evaluation complete, returning 10228 predictions
+[EVALUATE] Batch evaluation complete
+[EVALUATE] Accumulated 11000 recommendations for k=10
+[EVALUATE] Accumulated 110000 recommendations for k=100
+[EVALUATE] Accumulated 10228 predictions and 10228 labels
+[EVALUATE] All batches processed, computing final metrics
+[EVALUATE] Computed AUC: 0.4885
+[EVALUATE] HR@10: 0.5606
+[EVALUATE] HR@100: 1.6357
+[EVALUATE] NDCG@10: 0.3478
+[EVALUATE] NDCG@100: 0.5678
+[EVALUATE] PSP@10: 0.4889
+[EVALUATE] PSP@100: 1.2723
+[EVALUATE] Computing GINI coefficients
+[EVALUATE] Computing GINI@10 with 11000 recommendations
+[GINI] Calculating Gini for 11000 articles using key 'category'
+[GINI] Found 1 unique category values
+[GINI] Computing Gini coefficient for 1 values
+[GINI] Computed Gini coefficient: 0.0000
+[EVALUATE] GINI@10: 0.0
+[EVALUATE] Computing GINI@100 with 110000 recommendations
+[GINI] Calculating Gini for 110000 articles using key 'category'
+[GINI] Found 1 unique category values
+[GINI] Computing Gini coefficient for 1 values
+[GINI] Computed Gini coefficient: 0.0000
+[EVALUATE] GINI@100: 0.0
+[EVALUATE] Final metrics: num_users=1100, num_interactions=2838
+[EVALUATE] UnfairnessGap@10: 0.0469(Active avg=0.0502, Inactive avg=0.0033)
+val_metrics: {'HR@10': 0.5606, 'HR@100': 1.6357, 'NDCG@10': 0.3478, 'NDCG@100': 0.5678, 'PSP@10': 0.4889, 'PSP@100': 1.2723, 'GINI@10': np.float64(0.0), 'GINI@100': np.float64(0.0), 'AUC': 0.4885, 'num_users': 1100, 'num_interactions': 2838, 'UnfairnessGap@10': np.float64(0.0469)}
+Checking lamda: 5.0
+
+[EVALUATE] Starting evaluation with topk=[10, 100], test_set_eval=False
+[EVALUATE] Hyperparameters: num_users=1100, num_items=2431, lambda=5.0
+[EVALUATE] Train positive set size: 1100
+[EVALUATE] Prediction set size: 1100
+[EVALUATE] Processing users in batches of 20000
+[EVALUATE] Processing batch of users 0 to 1099 (total: 1100)
+[EVALUATE] Running forward pass for batch 0 to 1099
+[EVALUATE] Forward pass complete, prediction shape: (1100, 2431)
+[EVALUATE] Evaluating batch 0 to 1099
+[EVAL_BATCH] Starting batch evaluation with 1100 users
+[EVAL_BATCH] User 0: processing 1 positive and 50 negative examples
+[EVAL_BATCH] Collected 10228 predictions for AUC calculation
+[EVAL_BATCH] Marking train-set consumed items as negative infinity
+[EVAL_BATCH] User 0: marking 3 train positive items as -INF
+[EVAL_BATCH] User 1000: marking 1 train positive items as -INF
+[EVAL_BATCH] Sorting indices for top-100 recommendations
+[EVAL_BATCH] Computing metrics for k=10
+[EVAL_BATCH] User 0, k=10: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=10 metrics - Average HR: 0.0033, Average NDCG: 0.0023, Average PSP: 0.0029
+[EVAL_BATCH] Collected 11000 recommendations for k=10
+[EVAL_BATCH] Computing metrics for k=100
+[EVAL_BATCH] User 0, k=100: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=100 metrics - Average HR: 0.0189, Average NDCG: 0.0055, Average PSP: 0.0153
+[EVAL_BATCH] Collected 110000 recommendations for k=100
+[EVAL_BATCH] Batch evaluation complete, returning 10228 predictions
+[EVALUATE] Batch evaluation complete
+[EVALUATE] Accumulated 11000 recommendations for k=10
+[EVALUATE] Accumulated 110000 recommendations for k=100
+[EVALUATE] Accumulated 10228 predictions and 10228 labels
+[EVALUATE] All batches processed, computing final metrics
+[EVALUATE] Computed AUC: 0.489
+[EVALUATE] HR@10: 0.3333
+[EVALUATE] HR@100: 1.8872
+[EVALUATE] NDCG@10: 0.2346
+[EVALUATE] NDCG@100: 0.5517
+[EVALUATE] PSP@10: 0.2872
+[EVALUATE] PSP@100: 1.5301
+[EVALUATE] Computing GINI coefficients
+[EVALUATE] Computing GINI@10 with 11000 recommendations
+[GINI] Calculating Gini for 11000 articles using key 'category'
+[GINI] Found 1 unique category values
+[GINI] Computing Gini coefficient for 1 values
+[GINI] Computed Gini coefficient: 0.0000
+[EVALUATE] GINI@10: 0.0
+[EVALUATE] Computing GINI@100 with 110000 recommendations
+[GINI] Calculating Gini for 110000 articles using key 'category'
+[GINI] Found 1 unique category values
+[GINI] Computing Gini coefficient for 1 values
+[GINI] Computed Gini coefficient: 0.0000
+[EVALUATE] GINI@100: 0.0
+[EVALUATE] Final metrics: num_users=1100, num_interactions=2838
+[EVALUATE] UnfairnessGap@10: 0.0418(Active avg=0.0453, Inactive avg=0.0034)
+val_metrics: {'HR@10': 0.3333, 'HR@100': 1.8872, 'NDCG@10': 0.2346, 'NDCG@100': 0.5517, 'PSP@10': 0.2872, 'PSP@100': 1.5301, 'GINI@10': np.float64(0.0), 'GINI@100': np.float64(0.0), 'AUC': 0.489, 'num_users': 1100, 'num_interactions': 2838, 'UnfairnessGap@10': np.float64(0.0418)}
+Checking lamda: 20.0
+
+[EVALUATE] Starting evaluation with topk=[10, 100], test_set_eval=False
+[EVALUATE] Hyperparameters: num_users=1100, num_items=2431, lambda=20.0
+[EVALUATE] Train positive set size: 1100
+[EVALUATE] Prediction set size: 1100
+[EVALUATE] Processing users in batches of 20000
+[EVALUATE] Processing batch of users 0 to 1099 (total: 1100)
+[EVALUATE] Running forward pass for batch 0 to 1099
+[EVALUATE] Forward pass complete, prediction shape: (1100, 2431)
+[EVALUATE] Evaluating batch 0 to 1099
+[EVAL_BATCH] Starting batch evaluation with 1100 users
+[EVAL_BATCH] User 0: processing 1 positive and 50 negative examples
+[EVAL_BATCH] Collected 10228 predictions for AUC calculation
+[EVAL_BATCH] Marking train-set consumed items as negative infinity
+[EVAL_BATCH] User 0: marking 3 train positive items as -INF
+[EVAL_BATCH] User 1000: marking 1 train positive items as -INF
+[EVAL_BATCH] Sorting indices for top-100 recommendations
+[EVAL_BATCH] Computing metrics for k=10
+[EVAL_BATCH] User 0, k=10: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=10 metrics - Average HR: 0.0038, Average NDCG: 0.0018, Average PSP: 0.0030
+[EVAL_BATCH] Collected 11000 recommendations for k=10
+[EVAL_BATCH] Computing metrics for k=100
+[EVAL_BATCH] User 0, k=100: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=100 metrics - Average HR: 0.0150, Average NDCG: 0.0041, Average PSP: 0.0115
+[EVAL_BATCH] Collected 110000 recommendations for k=100
+[EVAL_BATCH] Batch evaluation complete, returning 10228 predictions
+[EVALUATE] Batch evaluation complete
+[EVALUATE] Accumulated 11000 recommendations for k=10
+[EVALUATE] Accumulated 110000 recommendations for k=100
+[EVALUATE] Accumulated 10228 predictions and 10228 labels
+[EVALUATE] All batches processed, computing final metrics
+[EVALUATE] Computed AUC: 0.4914
+[EVALUATE] HR@10: 0.3788
+[EVALUATE] HR@100: 1.5009
+[EVALUATE] NDCG@10: 0.1844
+[EVALUATE] NDCG@100: 0.4122
+[EVALUATE] PSP@10: 0.2999
+[EVALUATE] PSP@100: 1.1545
+[EVALUATE] Computing GINI coefficients
+[EVALUATE] Computing GINI@10 with 11000 recommendations
+[GINI] Calculating Gini for 11000 articles using key 'category'
+[GINI] Found 1 unique category values
+[GINI] Computing Gini coefficient for 1 values
+[GINI] Computed Gini coefficient: 0.0000
+[EVALUATE] GINI@10: 0.0
+[EVALUATE] Computing GINI@100 with 110000 recommendations
+[GINI] Calculating Gini for 110000 articles using key 'category'
+[GINI] Found 1 unique category values
+[GINI] Computing Gini coefficient for 1 values
+[GINI] Computed Gini coefficient: 0.0000
+[EVALUATE] GINI@100: 0.0
+[EVALUATE] Final metrics: num_users=1100, num_interactions=2838
+[EVALUATE] UnfairnessGap@10: 0.0391(Active avg=0.0412, Inactive avg=0.0022)
+val_metrics: {'HR@10': 0.3788, 'HR@100': 1.5009, 'NDCG@10': 0.1844, 'NDCG@100': 0.4122, 'PSP@10': 0.2999, 'PSP@100': 1.1545, 'GINI@10': np.float64(0.0), 'GINI@100': np.float64(0.0), 'AUC': 0.4914, 'num_users': 1100, 'num_interactions': 2838, 'UnfairnessGap@10': np.float64(0.0391)}
+Checking lamda: 50.0
+
+[EVALUATE] Starting evaluation with topk=[10, 100], test_set_eval=False
+[EVALUATE] Hyperparameters: num_users=1100, num_items=2431, lambda=50.0
+[EVALUATE] Train positive set size: 1100
+[EVALUATE] Prediction set size: 1100
+[EVALUATE] Processing users in batches of 20000
+[EVALUATE] Processing batch of users 0 to 1099 (total: 1100)
+[EVALUATE] Running forward pass for batch 0 to 1099
+[EVALUATE] Forward pass complete, prediction shape: (1100, 2431)
+[EVALUATE] Evaluating batch 0 to 1099
+[EVAL_BATCH] Starting batch evaluation with 1100 users
+[EVAL_BATCH] User 0: processing 1 positive and 50 negative examples
+[EVAL_BATCH] Collected 10228 predictions for AUC calculation
+[EVAL_BATCH] Marking train-set consumed items as negative infinity
+[EVAL_BATCH] User 0: marking 3 train positive items as -INF
+[EVAL_BATCH] User 1000: marking 1 train positive items as -INF
+[EVAL_BATCH] Sorting indices for top-100 recommendations
+[EVAL_BATCH] Computing metrics for k=10
+[EVAL_BATCH] User 0, k=10: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=10 metrics - Average HR: 0.0029, Average NDCG: 0.0013, Average PSP: 0.0021
+[EVAL_BATCH] Collected 11000 recommendations for k=10
+[EVAL_BATCH] Computing metrics for k=100
+[EVAL_BATCH] User 0, k=100: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=100 metrics - Average HR: 0.0147, Average NDCG: 0.0037, Average PSP: 0.0113
+[EVAL_BATCH] Collected 110000 recommendations for k=100
+[EVAL_BATCH] Batch evaluation complete, returning 10228 predictions
+[EVALUATE] Batch evaluation complete
+[EVALUATE] Accumulated 11000 recommendations for k=10
+[EVALUATE] Accumulated 110000 recommendations for k=100
+[EVALUATE] Accumulated 10228 predictions and 10228 labels
+[EVALUATE] All batches processed, computing final metrics
+[EVALUATE] Computed AUC: 0.4922
+[EVALUATE] HR@10: 0.2879
+[EVALUATE] HR@100: 1.4684
+[EVALUATE] NDCG@10: 0.1265
+[EVALUATE] NDCG@100: 0.3687
+[EVALUATE] PSP@10: 0.209
+[EVALUATE] PSP@100: 1.1332
+[EVALUATE] Computing GINI coefficients
+[EVALUATE] Computing GINI@10 with 11000 recommendations
+[GINI] Calculating Gini for 11000 articles using key 'category'
+[GINI] Found 1 unique category values
+[GINI] Computing Gini coefficient for 1 values
+[GINI] Computed Gini coefficient: 0.0000
+[EVALUATE] GINI@10: 0.0
+[EVALUATE] Computing GINI@100 with 110000 recommendations
+[GINI] Calculating Gini for 110000 articles using key 'category'
+[GINI] Found 1 unique category values
+[GINI] Computing Gini coefficient for 1 values
+[GINI] Computed Gini coefficient: 0.0000
+[EVALUATE] GINI@100: 0.0
+[EVALUATE] Final metrics: num_users=1100, num_interactions=2838
+[EVALUATE] UnfairnessGap@10: 0.0306(Active avg=0.0327, Inactive avg=0.0022)
+val_metrics: {'HR@10': 0.2879, 'HR@100': 1.4684, 'NDCG@10': 0.1265, 'NDCG@100': 0.3687, 'PSP@10': 0.209, 'PSP@100': 1.1332, 'GINI@10': np.float64(0.0), 'GINI@100': np.float64(0.0), 'AUC': 0.4922, 'num_users': 1100, 'num_interactions': 2838, 'UnfairnessGap@10': np.float64(0.0306)}
+Checking lamda: 100.0
+
+[EVALUATE] Starting evaluation with topk=[10, 100], test_set_eval=False
+[EVALUATE] Hyperparameters: num_users=1100, num_items=2431, lambda=100.0
+[EVALUATE] Train positive set size: 1100
+[EVALUATE] Prediction set size: 1100
+[EVALUATE] Processing users in batches of 20000
+[EVALUATE] Processing batch of users 0 to 1099 (total: 1100)
+[EVALUATE] Running forward pass for batch 0 to 1099
+[EVALUATE] Forward pass complete, prediction shape: (1100, 2431)
+[EVALUATE] Evaluating batch 0 to 1099
+[EVAL_BATCH] Starting batch evaluation with 1100 users
+[EVAL_BATCH] User 0: processing 1 positive and 50 negative examples
+[EVAL_BATCH] Collected 10228 predictions for AUC calculation
+[EVAL_BATCH] Marking train-set consumed items as negative infinity
+[EVAL_BATCH] User 0: marking 3 train positive items as -INF
+[EVAL_BATCH] User 1000: marking 1 train positive items as -INF
+[EVAL_BATCH] Sorting indices for top-100 recommendations
+[EVAL_BATCH] Computing metrics for k=10
+[EVAL_BATCH] User 0, k=10: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=10 metrics - Average HR: 0.0014, Average NDCG: 0.0007, Average PSP: 0.0010
+[EVAL_BATCH] Collected 11000 recommendations for k=10
+[EVAL_BATCH] Computing metrics for k=100
+[EVAL_BATCH] User 0, k=100: 0 hits out of 1.0 possible
+[EVAL_BATCH] k=100 metrics - Average HR: 0.0129, Average NDCG: 0.0032, Average PSP: 0.0101
+[EVAL_BATCH] Collected 110000 recommendations for k=100
+[EVAL_BATCH] Batch evaluation complete, returning 10228 predictions
+[EVALUATE] Batch evaluation complete
+[EVALUATE] Accumulated 11000 recommendations for k=10
+[EVALUATE] Accumulated 110000 recommendations for k=100
+[EVALUATE] Accumulated 10228 predictions and 10228 labels
+[EVALUATE] All batches processed, computing final metrics
+[EVALUATE] Computed AUC: 0.4891
+[EVALUATE] HR@10: 0.1364
+[EVALUATE] HR@100: 1.2909
+[EVALUATE] NDCG@10: 0.067
+[EVALUATE] NDCG@100: 0.3221
+[EVALUATE] PSP@10: 0.1036
+[EVALUATE] PSP@100: 1.0108
+[EVALUATE] Computing GINI coefficients
+[EVALUATE] Computing GINI@10 with 11000 recommendations
+[GINI] Calculating Gini for 11000 articles using key 'category'
+[GINI] Found 1 unique category values
+[GINI] Computing Gini coefficient for 1 values
+[GINI] Computed Gini coefficient: 0.0000
+[EVALUATE] GINI@10: 0.0
+[EVALUATE] Computing GINI@100 with 110000 recommendations
+[GINI] Calculating Gini for 110000 articles using key 'category'
+[GINI] Found 1 unique category values
+[GINI] Computing Gini coefficient for 1 values
+[GINI] Computed Gini coefficient: 0.0000
+[EVALUATE] GINI@100: 0.0
+[EVALUATE] Final metrics: num_users=1100, num_interactions=2838
+[EVALUATE] UnfairnessGap@10: 0.0244(Active avg=0.0264, Inactive avg=0.0020)
+val_metrics: {'HR@10': 0.1364, 'HR@100': 1.2909, 'NDCG@10': 0.067, 'NDCG@100': 0.3221, 'PSP@10': 0.1036, 'PSP@100': 1.0108, 'GINI@10': np.float64(0.0), 'GINI@100': np.float64(0.0), 'AUC': 0.4891, 'num_users': 1100, 'num_interactions': 2838, 'UnfairnessGap@10': np.float64(0.0244)}
+
+[EVALUATE] Starting evaluation with topk=[10, 100], test_set_eval=True
+[EVALUATE] Hyperparameters: num_users=1100, num_items=2431, lambda=5.0
+[EVALUATE] Train positive set size: 1100
+[EVALUATE] Adding validation positive set to train positive set for test evaluation
+[EVALUATE] Adding validation matrix to evaluation context
+[EVALUATE] Using test positive set for prediction
+[EVALUATE] Prediction set size: 1100
+[EVALUATE] Processing users in batches of 20000
+[EVALUATE] Processing batch of users 0 to 1099 (total: 1100)
+[EVALUATE] Running forward pass for batch 0 to 1099
+[EVALUATE] Forward pass complete, prediction shape: (1100, 2431)
+[EVALUATE] Evaluating batch 0 to 1099
+[EVAL_BATCH] Starting batch evaluation with 1100 users
+[EVAL_BATCH] User 0: processing 1 positive and 50 negative examples
+[EVAL_BATCH] User 1000: processing 2 positive and 50 negative examples
+[EVAL_BATCH] Collected 57039 predictions for AUC calculation
+[EVAL_BATCH] Marking train-set consumed items as negative infinity
+[EVAL_BATCH] User 0: marking 4 train positive items as -INF
+[EVAL_BATCH] User 1000: marking 1 train positive items as -INF
+[EVAL_BATCH] Sorting indices for top-100 recommendations
+[EVAL_BATCH] Computing metrics for k=10
+[EVAL_BATCH] User 0, k=10: 0 hits out of 1.0 possible
+[EVAL_BATCH] User 1000, k=10: 0 hits out of 2.0 possible
+[EVAL_BATCH] k=10 metrics - Average HR: 0.0356, Average NDCG: 0.0191, Average PSP: 0.0198
+[EVAL_BATCH] Collected 11000 recommendations for k=10
+[EVAL_BATCH] Computing metrics for k=100
+[EVAL_BATCH] User 0, k=100: 0 hits out of 1.0 possible
+[EVAL_BATCH] User 1000, k=100: 0 hits out of 2.0 possible
+[EVAL_BATCH] k=100 metrics - Average HR: 0.1299, Average NDCG: 0.0404, Average PSP: 0.0736
+[EVAL_BATCH] Collected 110000 recommendations for k=100
+[EVAL_BATCH] Batch evaluation complete, returning 57039 predictions
+[EVALUATE] Batch evaluation complete
+[EVALUATE] Accumulated 11000 recommendations for k=10
+[EVALUATE] Accumulated 110000 recommendations for k=100
+[EVALUATE] Accumulated 57039 predictions and 57039 labels
+[EVALUATE] All batches processed, computing final metrics
+[EVALUATE] Computed AUC: 0.6274
+[EVALUATE] HR@10: 3.5606
+[EVALUATE] HR@100: 12.9906
+[EVALUATE] NDCG@10: 1.9056
+[EVALUATE] NDCG@100: 4.0374
+[EVALUATE] PSP@10: 1.9784
+[EVALUATE] PSP@100: 7.3557
+[EVALUATE] Computing GINI coefficients
+[EVALUATE] Computing GINI@10 with 11000 recommendations
+[GINI] Calculating Gini for 11000 articles using key 'category'
+[GINI] Found 1 unique category values
+[GINI] Computing Gini coefficient for 1 values
+[GINI] Computed Gini coefficient: 0.0000
+[EVALUATE] GINI@10: 0.0
+[EVALUATE] Computing GINI@100 with 110000 recommendations
+[GINI] Calculating Gini for 110000 articles using key 'category'
+[GINI] Found 1 unique category values
+[GINI] Computing Gini coefficient for 1 values
+[GINI] Computed Gini coefficient: 0.0000
+[EVALUATE] GINI@100: 0.0
+[EVALUATE] Final metrics: num_users=1100, num_interactions=2838
+[EVALUATE] UnfairnessGap@10: 0.0025(Active avg=0.0380, Inactive avg=0.0405)
+| end of step    0 | time =  5.11 | HR@10 = 3.5606 | HR@100 = 12.9906 | NDCG@10 = 1.9056 | NDCG@100 = 4.0374 | PSP@10 = 1.9784 | PSP@100 = 7.3557 | GINI@10 = 0.0000 | GINI@100 = 0.0000 | AUC = 0.6274 | num_users = 1100.0000 | num_interactions = 2838.0000 | UnfairnessGap@10 = 0.0025 (TEST)
+
+JOB STATISTICS
+==============
+Job ID: 12292940
+Cluster: snellius
+User/Group: scur2748/scur2748
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 16
+CPU Utilized: 00:00:31
+CPU Efficiency: 5.87% of 00:08:48 core-walltime
+Job Wall-clock time: 00:00:33
+Memory Utilized: 1.50 MB
+Memory Efficiency: 0.00% of 180.00 GB (180.00 GB/node)
