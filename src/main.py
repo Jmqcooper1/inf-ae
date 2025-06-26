@@ -9,12 +9,12 @@ import copy
 import random
 import numpy as np
 
-from src.utils import log_end_epoch, get_item_propensity, get_common_path
+from utils import log_end_epoch, get_item_propensity, get_common_path
 
 
 def train(hyper_params, data):
-    from src.model import make_kernelized_rr_forward
-    from src.eval import evaluate
+    from model import make_kernelized_rr_forward
+    from eval import evaluate
 
     # This just instantiates the function
     kernelized_rr_forward, kernel_fn = make_kernelized_rr_forward(hyper_params)
@@ -59,6 +59,7 @@ def train(hyper_params, data):
     ):
         print("Checking lamda:", lamda)
         hyper_params["lamda"] = lamda
+        hyper_params["use_reranking"] = False
 
         val_metrics = evaluate(
             hyper_params,
@@ -66,8 +67,7 @@ def train(hyper_params, data):
             data,
             item_propensity,
             sampled_matrix,
-            use_gini=hyper_params["use_gini"],
-            use_unfairness_gap=hyper_params["use_unfairness_gap"],
+            topk=[10, 100],
         )
     
         print("val_metrics:", val_metrics)
@@ -75,17 +75,25 @@ def train(hyper_params, data):
             best_metric, best_lamda = val_metrics[VAL_METRIC], lamda
 
     # Return metrics with the best lamda on the test-set
-    hyper_params["lamda"] = best_lamda
-    test_metrics = evaluate(
-        hyper_params,
-        kernelized_rr_forward,
-        data,
-        item_propensity,
-        sampled_matrix,
-        test_set_eval=True,
-        use_gini=hyper_params["use_gini"],
-        use_unfairness_gap=hyper_params["use_unfairness_gap"],
-    )
+    for alpha in (
+        [0.0, 1.0, 5.0, 20.0, 50.0, 100.0]
+        if hyper_params["grid_search_alpha"]
+        else [hyper_params["alpha"]]
+    ):
+        print(f"\n>>> Running test-set evaluation for alpha = {alpha}")
+        #print(f"\n>>> Running test-set evaluation with user-group fairness reranking")
+        hyper_params["lamda"] = best_lamda
+        hyper_params["use_reranking"] = True
+        hyper_params["alpha"] = alpha
+        test_metrics = evaluate(
+            hyper_params,
+            kernelized_rr_forward,
+            data,
+            item_propensity,
+            sampled_matrix,
+            topk=[10, 100],
+            test_set_eval=True,
+        )
 
     log_end_epoch(hyper_params, test_metrics, 0, time.time() - start_time)
     start_time = time.time()
@@ -102,7 +110,7 @@ def main(hyper_params, gpu_id=None):
     if "float64" in hyper_params and hyper_params["float64"] == True:
         config.update("jax_enable_x64", True)
 
-    from src.data import Dataset
+    from data import Dataset
 
     np.random.seed(hyper_params["seed"])
     random.seed(hyper_params["seed"])
@@ -121,6 +129,6 @@ def main(hyper_params, gpu_id=None):
 
 
 if __name__ == "__main__":
-    from src.hyper_params import hyper_params
+    from hyper_params import hyper_params
 
     main(hyper_params)

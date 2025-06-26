@@ -138,3 +138,19 @@ dmypy.json
 .cursor/
 
 ease_rec/
+
+log/
+log_tensorboard/
+saved/
+sbat/
+slurm_output/
+job_scripts/slurm_out
+
+src/fairness_reranking.py
+src/user_group_adjusted_logits.py
+
+# Data folder - download from releases
+data/
+data.tar.gz
+
+baselines/

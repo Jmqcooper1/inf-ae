@@ -8,8 +8,10 @@ if len(sys.argv) < 2:
     sys.exit(1)
 
 dataset = sys.argv[1]
-input_path = f"data/{dataset}/{dataset}.inter"
-output_path = f"data/{dataset}/{dataset}_3core.inter"
+
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../.."))
+input_path = os.path.join(base_dir, f"inf-ae/data/{dataset}/{dataset}.inter")
+output_path = os.path.join(base_dir, f"inf-ae/data/{dataset}/{dataset}_3core.inter")
 
 # Load the dataset
 df = pd.read_csv(input_path, sep='\t')

@@ -43,13 +43,16 @@ def prepare_single_inter_file(dataset_name, base_data_path):
     
     df = pd.DataFrame({"user_id:token": users, "item_id:token": items, "rating:float": ratings})
     
+    # CRITICAL: Filter dataframe based on index file, replicating the original script's logic.
+    index = np.load(npz_path)["data"]
+    df = df[index != -1]
+
     # Save the complete file if it wasn't there
     if not os.path.exists(inter_path):
         df.to_csv(inter_path, sep='\t', index=False)
         print(f"Saved single interaction file to {inter_path}")
 
     # Calculate split ratios from the index file
-    index = np.load(npz_path)["data"]
     total = len(index)
     train_ratio = np.sum(index == 0) / total
     val_ratio = np.sum(index == 1) / total
@@ -63,7 +66,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', type=str, required=True, help='The baseline model to run.')
     parser.add_argument('--dataset', type=str, required=True, help='The dataset to run the model on.')
-    args = parser.parse_args()
+    parser.add_argument('--result_file', type=str, default='results/baseline_results.csv', help='The file to save the results to.')
+    
+    # Use parse_known_args to separate our script's args from RecBole's hyper-parameters
+    args, extra_args = parser.parse_known_args()
 
     # Define paths
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -85,11 +91,22 @@ if __name__ == "__main__":
                 if model_config:
                     config_dict.update(model_config)
 
-        # 3. Build the final config dictionary, now with the crucial eval_args
+        # 3. Handle model-specific parameter adjustments
+        if args.model == 'EASE':
+            config_dict.pop('epochs', None)
+            config_dict.pop('train_batch_size', None)
+            config_dict.pop('stopping_step', None)
+            config_dict.pop('eval_step', None)
+
+        # 4. Build the final config dictionary for RecBole
         config_dict.update({
             'model': args.model,
             'dataset': args.dataset,
             'data_path': base_data_path,
+            'result_file': args.result_file,
+            'load_col': {
+                'inter': ['user_id', 'item_id', 'rating']
+            },
             'eval_args': {
                 'split': {'RS': split_ratios},
                 'group_by': 'user',
@@ -98,7 +115,9 @@ if __name__ == "__main__":
             }
         })
         
-        run_recbole(config_dict=config_dict)
+        run_recbole(config_dict=config_dict,
+                    config_file_list=[os.path.join(config_path, 'base.yaml'), model_yaml_path] if os.path.exists(model_yaml_path) else [os.path.join(config_path, 'base.yaml')],
+                    saved=True)
 
     except Exception as e:
         print(f"Error running {args.model} on {args.dataset}: {e}")

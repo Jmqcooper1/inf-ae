@@ -6,6 +6,11 @@
 load_col: ~
 
 # LightGCN Hyperparameters
+train_neg_sample_args:
+  distribution: 'popularity'
+  sample_num: 1
+  dynamic: False
+  candidate_num: 0
 # These are some common hyperparameters you might want to tune.
 # We can leave them commented out to use RecBole's defaults for now.
 # embedding_size: 64

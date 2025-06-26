@@ -69,10 +69,17 @@ def load_raw_dataset(
     item_path=None,
 ):
     if data_path is None or index_path is None:
-        data_path, index_path = [
-            f"data/{dataset}/total_data.hdf5",
-            f"data/{dataset}/index.npz",
-        ]
+        base_folder = f"data/ml-20m" if dataset.startswith("ml-20m_") else f"data/{dataset}"
+
+        # Handle subsample suffix
+        if dataset.startswith("ml-20m_"):
+            suffix = dataset.split("_")[1]  # e.g., '5K'
+            data_path = os.path.join(base_folder, f"total_data_{suffix}.hdf5")
+            index_path = os.path.join(base_folder, f"index_{suffix}.npz")
+        else:
+            data_path = os.path.join(base_folder, "total_data.hdf5")
+            index_path = os.path.join(base_folder, "index.npz")
+
         print(f"Using default paths: data_path={data_path}, index_path={index_path}")
 
     print(f"Loading data from {data_path}")
@@ -128,37 +135,10 @@ def load_raw_dataset(
     # Max: This code was put into comment becuase accessing non-existing .item files will lead to errors
     print(f"Reading item data from {item_path}")
     # FIX: Handle CSV parsing errors with more robust error handling
-    try:
-        # First attempt with standard settings
-        item_df = pd.read_csv(
-            item_path, delimiter="\t", header=0, engine="python", encoding="latin-1"
-        )
-    except pd.errors.ParserError as e:
-        print(f"Parser error with standard settings: {e}")
-        print("Trying with on_bad_lines='warn' and encoding='utf-8'")
-        item_df = pd.read_csv(
-            item_path,
-            delimiter="\t",
-            header=0,
-            engine="python",
-            encoding="utf-8",
-            on_bad_lines="warn",
-        )
-    print(f"Loaded item data with shape: {item_df.shape}")
-#
-    all_genres = [
-        genre
-        for genre_list in item_df[category_id].fillna("[Nan]")
-        for genre in genre_list.strip("[]").split(", ")
-    ]
-    unique_genres_list = list(set(all_genres))
-    item_map_to_category = dict(
-        zip(item_df[item_id].astype(int) + 1, item_df[category_id])
-    )
-
     if os.path.exists(item_path):
         print(f"Reading item data from {item_path}")
         try:
+            # First attempt with standard settings
             item_df = pd.read_csv(
                 item_path, delimiter="\t", header=0, engine="python", encoding="latin-1"
             )
@@ -174,13 +154,16 @@ def load_raw_dataset(
                 on_bad_lines="warn",
             )
         print(f"Loaded item data with shape: {item_df.shape}")
-    
+
+        # Extract categories/genres
         all_genres = [
             genre
             for genre_list in item_df[category_id].fillna("[Nan]")
             for genre in genre_list.strip("[]").split(", ")
         ]
         unique_genres_list = list(set(all_genres))
+
+        # Map item_id (+1) to category
         item_map_to_category = dict(
             zip(item_df[item_id].astype(int) + 1, item_df[category_id])
         )
@@ -272,9 +255,7 @@ def load_raw_dataset(
         while len(ret["negatives"][u]) < 50:
             attempts += 1
             if attempts > 1000:  # Safety check to avoid infinite loops
-                logger.warning(
-                    f"User {u} could not get 50 negatives after 1000 attempts"
-                )
+                print("User {u} could not get 50 negatives after 1000 attempts")
                 break
 
             rand_item = np.random.randint(0, num_items)

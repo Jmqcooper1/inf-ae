@@ -1,0 +1,45 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu_a100
+#SBATCH --gpus=1
+#SBATCH --job-name=BaselineTuning
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --time=02:00:00
+#SBATCH --array=1-11%4 # Runs 11 jobs from the hparams file, 4 at a time max
+#SBATCH --output=slurm_output/tuning_%A_%a.out
+
+# Create directories for slurm logs and results if they don't exist
+# The -p flag ensures it doesn't fail if the directory already exists
+mkdir -p ./slurm_output
+mkdir -p ./results
+
+module purge
+module load 2024
+module load Miniconda3/24.7.1-0
+module load CUDA/12.6.0
+
+# It's good practice to fail the script if a command fails
+set -e
+
+source activate baselines
+
+# Define paths relative to the project root where you run "sbatch"
+HPARAMS_FILE="src/extensions/baselines/hyperparameters.txt"
+RUNNER_SCRIPT="src/extensions/baselines/run_recbole_baselines.py"
+RESULT_FILE="results/baseline_tuning_results.csv"
+
+# Get the hyperparameters for the specific job in the array
+# This reads the N-th line of the file, where N is the job array ID
+HPARAMS=$(head -n ${SLURM_ARRAY_TASK_ID} ${HPARAMS_FILE} | tail -n 1)
+
+echo "STARTING JOB ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
+echo "Running on host: $(hostname)"
+echo "Using GPU: $CUDA_VISIBLE_DEVICES"
+echo "Running with hyperparameters: ${HPARAMS}"
+
+# Run the python script with the loaded hyperparameters
+# The --result_file argument ensures all jobs write to the same output CSV
+srun python ${RUNNER_SCRIPT} --result_file ${RESULT_FILE} ${HPARAMS}
+
+echo "FINISHED JOB ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}" 

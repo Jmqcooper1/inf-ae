@@ -240,14 +240,13 @@ if __name__ == "__main__":
 
     elif dataset == "steam":
         inter_path = os.path.join(BASE_PATH, "steam", "steam.inter")
-        item_path = os.path.join(BASE_PATH, "steam", "steam_original.item")
         total_data = prep_recbole(
             inter_path,
             "user_id:token",
-            "product_id:token",
-            "play_hours:float",
-            item_path,
-            "id:token",
+            "item_id:token",
+            "rating:float",
+            item_file_path="",  # no item file needed
+            item_id_2="item_id:token",
         )
 
     elif dataset == "netflix":
@@ -272,10 +271,110 @@ if __name__ == "__main__":
             item_id_2="item_id:token",
         )
 
+    elif dataset == "ml-20m_5K":
+        inter_path = os.path.join(BASE_PATH, "ml-20m", "ml-20m_5K.inter")
+        total_data = prep_recbole(
+            inter_path,
+            "user_id:token",
+            "item_id:token",
+            "rating:float",
+            item_file_path="",
+            item_id_2="item_id:token",
+        )
+
+    elif dataset == "ml-20m_10K":
+        inter_path = os.path.join(BASE_PATH, "ml-20m", "ml-20m_10K.inter")
+        total_data = prep_recbole(
+            inter_path,
+            "user_id:token",
+            "item_id:token",
+            "rating:float",
+            item_file_path="",
+            item_id_2="item_id:token",
+        )
+
+    elif dataset == "ml-20m_25K":
+        inter_path = os.path.join(BASE_PATH, "ml-20m", "ml-20m_25K.inter")
+        total_data = prep_recbole(
+            inter_path,
+            "user_id:token",
+            "item_id:token",
+            "rating:float",
+            item_file_path="",
+            item_id_2="item_id:token",
+        )
+
+    elif dataset == "ml-20m_50K":
+        inter_path = os.path.join(BASE_PATH, "ml-20m", "ml-20m_50K.inter")
+        total_data = prep_recbole(
+            inter_path,
+            "user_id:token",
+            "item_id:token",
+            "rating:float",
+            item_file_path="",
+            item_id_2="item_id:token",
+        )
+
+    elif dataset == "ml-20m_100K":
+        inter_path = os.path.join(BASE_PATH, "ml-20m", "ml-20m_100K.inter")
+        total_data = prep_recbole(
+            inter_path,
+            "user_id:token",
+            "item_id:token",
+            "rating:float",
+            item_file_path="",
+            item_id_2="item_id:token",
+        )
+    
+    elif dataset == "ml-20m_1K":
+        inter_path = os.path.join(BASE_PATH, "ml-20m", "ml-20m_1K.inter")
+        total_data = prep_recbole(
+            inter_path,
+            "user_id:token",
+            "item_id:token",
+            "rating:float",
+            item_file_path="",
+            item_id_2="item_id:token",
+        )
+
+    elif dataset == "ml-20m_20K":
+        inter_path = os.path.join(BASE_PATH, "ml-20m", "ml-20m_20K.inter")
+        total_data = prep_recbole(
+            inter_path,
+            "user_id:token",
+            "item_id:token",
+            "rating:float",
+            item_file_path="",
+            item_id_2="item_id:token",
+        )
+
     else:
         raise Exception("Could not understand this dataset")
 
-    dataset_path = os.path.join(BASE_PATH, dataset)
-    total_data.save_data(dataset_path)
-    total_data.train_test_split()
-    total_data.save_index(dataset_path)
+
+    dataset_path = os.path.join(BASE_PATH, "ml-20m" if "ml-20m" in dataset else dataset)
+
+    # Determine if this is one of the subsample versions
+    subsample_suffix = None
+    if dataset.startswith("ml-20m_"):
+        subsample_suffix = dataset.split("_")[1]
+
+    # Save data
+    if subsample_suffix:
+        total_data.save_data(dataset_path)
+        # Rename the saved hdf5 file
+        os.rename(
+            os.path.join(dataset_path, "total_data.hdf5"),
+            os.path.join(dataset_path, f"total_data_{subsample_suffix}.hdf5"),
+        )
+        total_data.train_test_split()
+        total_data.save_index(dataset_path)
+        # Rename the saved index file
+        os.rename(
+            os.path.join(dataset_path, "index.npz"),
+            os.path.join(dataset_path, f"index_{subsample_suffix}.npz"),
+        )
+    else:
+        total_data.save_data(dataset_path)
+        total_data.train_test_split()
+        total_data.save_index(dataset_path)
