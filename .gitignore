@@ -152,5 +152,3 @@ src/user_group_adjusted_logits.py
 # Data folder - download from releases
 data/
 data.tar.gz
-
-baselines/
