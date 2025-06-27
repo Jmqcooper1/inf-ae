@@ -27,7 +27,7 @@ The repository is organized as follows:
 - `data/`: Contains the datasets.
 - `job_scripts/`: Contains all Slurm job scripts for running experiments on a cluster.
   -   `slurm_out/`: Default output directory for Slurm jobs, organized by job type (inf_ae, baselines, ease, preprocessing).
-- `results/`: Contains the results of experiments, such as logs and saved models.
+- `saved/`: Contains the results of experiments, such as logs and saved models.
 - `log/`: Contains logs from model runs.
 
 ---
