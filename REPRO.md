@@ -24,7 +24,7 @@ This document provides the full set of instructions to reproduce our project res
 ## ⚙️ Environment Setup
 
 
-Setup project by running the following commands or by checking `install_enviroment.job`:
+Setup project by running the following commands or by checking `job_scripts/install_enviroment.job`:
 
 ```bash
 # Example -- overwrite if needed
@@ -40,6 +40,30 @@ conda install -c conda-forge matplotlib pandas
 
 # Install project-specific requirements
 pip install -r requirements.txt
+```
+
+Setup to run baselines by running the following commands or by checking `job_scripts/install_enviroment_baselines.job`:
+
+```bash
+# Example -- overwrite if needed
+# Create a clean environment
+conda create -n baselines python=3.9
+conda activate baselines
+
+# Install JAX with CUDA support from conda-forge
+conda install -c conda-forge "jaxlib=*=*cuda*" jax
+
+# Install RecBole library
+pip install recbole
+
+# Install Thop for Recbole 
+pip install thop
+
+# Install project-specific requirements
+pip install -r requirements_baselines.txt
+
+# Install other basic dependencies
+conda install -c conda-forge matplotlib tensorflow=2.12.0 numpy=1.23.5 pandas=1.5.3 h5py=3.6.0 scipy=1.11.4
 ```
 
 ---

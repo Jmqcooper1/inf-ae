@@ -4,7 +4,7 @@
 #SBATCH --gpus=1
 #SBATCH --job-name=run_experiment
 #SBATCH --time=02:00:00
-#SBATCH --output=./slurm_out/inf_ae/run_experiment_%j.out
+#SBATCH --output=job_scripts/slurm_out/inf_ae/run_experiment_%j.out
 
 #exit if an error occurs
 set -e

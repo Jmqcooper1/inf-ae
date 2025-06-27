@@ -4,7 +4,7 @@
 #SBATCH --gpus=1
 #SBATCH --job-name=install_env
 #SBATCH --time=06:00:00
-#SBATCH --output=./slurm_out/install_env.out
+#SBATCH --output=job_scripts/slurm_out/install_env.out
 
 #exit if an error occurs
 set -e
@@ -24,6 +24,8 @@ conda install -c conda-forge "jaxlib=*=*cuda*" jax numpy=1.24 scipy
 
 # Install other basic dependencies
 conda install -c conda-forge matplotlib pandas
+
+cd .. 
 
 # Install project-specific requirements
 pip install -r requirements.txt

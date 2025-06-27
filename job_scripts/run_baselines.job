@@ -2,11 +2,11 @@
 
 #SBATCH --partition=gpu_a100
 #SBATCH --gpus=1
-#SBATCH --job-name=run_recbole_baselines
+#SBATCH --job-name=run_baselines
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=9
-#SBATCH --time=04:00:00 # Increased time for running all combinations
-#SBATCH --output=./slurm_out/baselines/recbole_baselines_%j.out
+#SBATCH --time=12:00:00
+#SBATCH --output=job_scripts/slurm_out/baselines/MultiVAE/steam_run%j.out
 
 #exit if an error occurs
 set -e
@@ -18,16 +18,4 @@ module load CUDA/12.6.0
 
 source activate baselines
 
-# Define the models and datasets to run
-BASELINES=('LightGCN' 'EASE' 'MultiVAE' 'Pop')
-DATASETS=('douban' 'magazine' 'ml-1m' 'ml-20m' 'netflix' 'steam')
-
-# Loop through each combination and run the experiment
-for dataset in "${DATASETS[@]}"; do
-  for model in "${BASELINES[@]}"; do
-    echo "===== Submitting RecBole job: Model=${model}, Dataset=${dataset} ====="
-    python src/extensions/baselines/run_recbole_baselines.py --model "$model" --dataset "$dataset"
-    echo "===== Finished RecBole job: Model=${model}, Dataset=${dataset} ====="
-    echo ""
-  done
-done
+python src/extensions/baselines/run_baselines.py --model 'MultiVAE' --dataset 'steam'

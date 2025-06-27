@@ -1,7 +1,0 @@
-# MultiVAE Hyperparameters
-epochs: 50
-learning_rate: 0.001
-train_batch_size: 512
-eval_batch_size: 4096
-latent_dim: 200
-dropout_prob: 0.5 

@@ -6,7 +6,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=9
 #SBATCH --time=04:00:00
-#SBATCH --output=sbat/slurm_out/eval/baselines%j.out
+#SBATCH --output=job_scripts/slurm_out/baselines/eval%j.out
 
 #exit if an error occurs
 set -e
@@ -18,4 +18,4 @@ module load CUDA/12.6.0
 
 source activate baselines
 
-python baselines/eval_baselines.py
+python src/extensions/baselines/eval_baselines.py

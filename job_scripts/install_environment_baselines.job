@@ -4,7 +4,7 @@
 #SBATCH --gpus=1
 #SBATCH --job-name=install_env
 #SBATCH --time=06:00:00
-#SBATCH --output=./slurm_out/install_env.out
+#SBATCH --output=job_scripts/slurm_out/baselines/install_env.out
 
 #exit if an error occurs
 set -e
@@ -15,19 +15,21 @@ module load Miniconda3/24.7.1-0
 module load CUDA/12.6.0
 
 # Create a clean environment
-conda create -n inf-ae python=3.9
+conda create -n baselines python=3.9
 
-source activate inf-ae
+source activate baselines
 
 # Install JAX with CUDA support from conda-forge
-conda install -c conda-forge "jaxlib=*=*cuda*" jax scipy=1.11.4
+conda install -c conda-forge "jaxlib=*=*cuda*" jax
 
-# Install other basic dependencies
-conda install -c conda-forge matplotlib
+# Install RecBole Library
+pip install recbole
 
+# Install Thop for RecBole
 pip install thop
-
-conda install -c conda-forge tensorflow=2.12.0 numpy=1.23.5 pandas=1.5.3 h5py=3.6.0 -y
 
 # Install project-specific requirements
 pip install -r requirements_baselines.txt
+
+# Install other basic dependencies
+conda install -c conda-forge matplotlib tensorflow=2.12.0 numpy=1.23.5 pandas=1.5.3 h5py=3.6.0 scipy=1.11.4
