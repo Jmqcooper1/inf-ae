@@ -40,10 +40,10 @@ The datasets are available as a compressed archive. To download and extract:
 
 ```bash
 # Download from GitHub releases
-wget https://github.com/Jmqcooper1/inf-ae/releases/download/dataset/data.tar.gz
+wget https://github.com/Jmqcooper1/inf-ae/releases/download/data/data.zip
 
 # Extract to project root
-tar -xzf data.tar.gz
+unzip data.zip
 ```
 
 This will create a `data/` folder containing all datasets (Netflix, Steam, ML-1M, ML-20M, Magazine, Douban).
