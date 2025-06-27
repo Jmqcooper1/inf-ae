@@ -52,7 +52,7 @@ This will create a `data/` folder containing all datasets (Netflix, Steam, ML-1M
 
 To install the environment, run the following command:
 ```bash
-sbatch install_environment.job
+sbatch job_scripts/install_environment.job
 ```
 remember to change the job file based on the server you are using.
 
