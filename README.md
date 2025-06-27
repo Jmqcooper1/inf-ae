@@ -113,13 +113,13 @@ We use [RecBole](https://recbole.io/) to implement and evaluate several baseline
 To run a baseline model or by checking `job_scripts/run_baselines.job`:
 
 ```bash
-python src/extensions/baselines/run_baselines.py --model <MODEL_NAME> --dataset <DATASET_NAME> --auc
+python src/extensions/baselines/run_baselines.py --model <MODEL_NAME> --dataset <DATASET_NAME> --use_auc
 ```
 
 Where:
 - `<MODEL_NAME>` can be: 'LightGCN', 'EASE', or 'MultiVAE'
 - `<DATASET_NAME>` can be: 'douban', 'magazine', 'ml-1m', 'ml-20m', 'netflix', 'steam'
-- `--auc` (optional flag): Computes the Area Under the ROC Curve (AUC) metric during evaluation.
+- `--use_auc` (optional flag): Computes the Area Under the ROC Curve (AUC) metric during evaluation.
 
 To evaluate the baseline models using the generated run file, ground truth file, and train file, execute the following command or by checking `job_scripts/eval_baselines.job`:
 
