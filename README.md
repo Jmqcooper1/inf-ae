@@ -40,7 +40,7 @@ The datasets are available as a compressed archive. To download and extract:
 
 ```bash
 # Download from GitHub releases
-wget [https://github.com/Jmqcooper1/inf-ae/releases/download/v1.0/data.tar.gz](https://github.com/Jmqcooper1/inf-ae/releases/download/dataset/data.tar.gz)
+wget https://github.com/Jmqcooper1/inf-ae/releases/download/dataset/data.tar.gz
 
 # Extract to project root
 tar -xzf data.tar.gz
